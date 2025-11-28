@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
-    path: Assets/wr507d_shooter.unity
+    path: Assets/Scenes/wr507d_shooter.unity
     guid: 41b21d0c8a5ee4942ab7a4fa6e034ccb
   m_configObjects:
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: ce08b604930430748b940e9f959c1ef9,
