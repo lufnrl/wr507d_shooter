@@ -30,6 +30,16 @@ public class MoutonMovement : MonoBehaviour
     {
         startPosition = transform.position;
         animator = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody>();
+        
+        // Configure rigidbody for proper collision
+        if (rb != null)
+        {
+            rb.isKinematic = false;
+            rb.useGravity = true;
+            rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionY;
+            rb.drag = 5f;
+        }
         
         ChooseNewDirection();
     }

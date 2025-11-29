@@ -2523,9 +2523,9 @@ GameObject:
   - component: {fileID: 6517686061769116560}
   - component: {fileID: 6517686061769116561}
   - component: {fileID: 6517686061769116558}
-  - component: {fileID: -8998800087054674051}
   - component: {fileID: -4793318053692017227}
   - component: {fileID: -7136005793842203071}
+  - component: {fileID: 3647828175716303267}
   m_Layer: 0
   m_Name: Sheep
   m_TagString: Untagged
@@ -2541,15 +2541,15 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6517686061769116559}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0.33804974, z: -0, w: 0.94112825}
+  m_LocalPosition: {x: 0.11946702, y: 0, z: 0.04291211}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6517686061308155072}
   - {fileID: 6517686061143944575}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -39.516, z: 0}
 --- !u!95 &6517686061769116561
 Animator:
   serializedVersion: 5
@@ -2592,27 +2592,6 @@ MonoBehaviour:
   trotAnimation: trot_forward
   sittostandAnimation: sit_to_stand
   standtositAnimation: stand_to_sit
---- !u!65 &-8998800087054674051
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6517686061769116559}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &-4793318053692017227
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2656,6 +2635,27 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 116
   m_CollisionDetection: 0
+--- !u!65 &3647828175716303267
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6517686061769116559}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 0.694682, z: 1.3172482}
+  m_Center: {x: -0.0000012625405, y: 0.86439794, z: 0.2567808}
 --- !u!1 &6517686061794323453
 GameObject:
   m_ObjectHideFlags: 0
