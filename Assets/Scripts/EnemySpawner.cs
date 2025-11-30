@@ -157,6 +157,7 @@ public class FlyingSaucerHover : MonoBehaviour
     private GameObject capturedMouton;
     private float moutonGroundY;
     private List<GameObject> moutonList;
+    private ParticleSystem abductionBeam;
 
     public void Initialize(float bobSpd, float bobAmt, float hoverDur, float atkSpd, float hoverDist, float abductSpd, float abductDur, List<GameObject> moutons)
     {
@@ -176,6 +177,13 @@ public class FlyingSaucerHover : MonoBehaviour
     {
         startPosition = transform.position;
         initialRotation = transform.rotation;
+        
+        // Find the abduction beam particle system and disable it initially
+        abductionBeam = GetComponentInChildren<ParticleSystem>();
+        if (abductionBeam != null)
+        {
+            abductionBeam.Stop();
+        }
     }
 
     void Update()
@@ -232,8 +240,14 @@ public class FlyingSaucerHover : MonoBehaviour
                     // Keep the original rotation (stay level)
                     transform.rotation = initialRotation;
 
-                    // Check if close enough to pick up
-                    if (Vector3.Distance(transform.position, hoverTargetPosition) < 0.5f)
+                    // Check if close enough to pick up - start beam effect
+                    float distanceToTarget = Vector3.Distance(transform.position, hoverTargetPosition);
+                    if (distanceToTarget < 3f && abductionBeam != null && !abductionBeam.isPlaying)
+                    {
+                        abductionBeam.Play();
+                    }
+                    
+                    if (distanceToTarget < 0.5f)
                     {
                         PickUpMouton();
                     }
@@ -249,6 +263,12 @@ public class FlyingSaucerHover : MonoBehaviour
                         sheepPos.z = transform.position.z;
                         sheepPos.y = moutonGroundY; // Keep at ground level
                         capturedMouton.transform.position = sheepPos;
+                    }
+
+                    // Ensure beam is active while carrying
+                    if (abductionBeam != null && !abductionBeam.isPlaying)
+                    {
+                        abductionBeam.Play();
                     }
 
                     // Gentle bobbing while carrying
@@ -291,6 +311,12 @@ public class FlyingSaucerHover : MonoBehaviour
 
     void OnDestroy()
     {
+        // Stop the beam effect
+        if (abductionBeam != null)
+        {
+            abductionBeam.Stop();
+        }
+        
         // Release the mouton if this alien is destroyed before capturing
         if (targetMouton != null && !hasPickedUp)
         {
