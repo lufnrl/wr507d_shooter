@@ -20,31 +20,43 @@ public class BowController : MonoBehaviour
 
     private Transform interactor;
 
+    private float strength;
+
+    public UnityEvent OnBowPulled; // Allow string visualization
+    public UnityEvent<float> OnBowReleased; // The moment we shoot
+
 
     private void Awake()
     {
+        // Grabbing the cube on the string
         interactable = midPointGrabObject.GetComponent<XRGrabInteractable>();
     }
 
     private void Start()
     {
+        // Press the grip trigger
         interactable.selectEntered.AddListener(PrepareBowString);
         interactable.selectExited.AddListener(ResetBowString);
+    }
+
+    private void ResetBowString(SelectExitEventArgs arg0)
+    {
+        OnBowReleased?.Invoke(strength);
+        strength = 0;
+
+        interactor = null;
+        midPointGrabObject.localPosition = Vector3.zero;
+        midPointVisualObject.localPosition = Vector3.zero;
+        bowStringRenderer.CreateString(null); // Recreate the string straight
+
     }
 
     private void PrepareBowString(SelectEnterEventArgs arg0)
     {
         interactor = arg0.interactorObject.transform;
+        OnBowPulled?.Invoke(); // Make appear the string visualization
     }
 
-    private void ResetBowString(SelectExitEventArgs arg0)
-    {
-        interactor = null;
-        midPointGrabObject.localPosition = Vector3.zero;
-        midPointVisualObject.localPosition = Vector3.zero;
-        bowStringRenderer.CreateString(null);
-
-    }
 
     private void Update()
     {
@@ -52,18 +64,18 @@ public class BowController : MonoBehaviour
         {
             //convert bow string mid point position to the local space of the MidPoint
             Vector3 midPointLocalSpace = 
-                midPointParent.InverseTransformPoint(midPointGrabObject.position); // localPosition
+                midPointParent.InverseTransformPoint(midPointGrabObject.position); // can also take localPosition
 
             //get the offset
             float midPointLocalZAbs = Mathf.Abs(midPointLocalSpace.z);
 
-            HandleStringPushedBackToStart(midPointLocalSpace);
+            HandleStringPushedBackToStart(midPointLocalSpace); // String be straight when not pulled
 
-            HandleStringPulledBackTolimit(midPointLocalZAbs, midPointLocalSpace);
+            HandleStringPulledBackTolimit(midPointLocalZAbs, midPointLocalSpace); // Constrain the string pull limit
 
-            HandlePullingString(midPointLocalZAbs, midPointLocalSpace);
+            HandlePullingString(midPointLocalZAbs, midPointLocalSpace); // Pulling the string within zero and limit
 
-            bowStringRenderer.CreateString(midPointVisualObject.position);
+            bowStringRenderer.CreateString(midPointVisualObject.position); // Recreate the string with the new mid point position
         }
     }
 
@@ -72,15 +84,23 @@ public class BowController : MonoBehaviour
         //what happens when we are between point 0 and the string pull limit
         if (midPointLocalSpace.z < 0 && midPointLocalZAbs < bowStringStretchLimit)
         {
-            midPointVisualObject.localPosition = new Vector3(0, 0, midPointLocalSpace.z);
+            strength = Remap(midPointLocalZAbs, 0, bowStringStretchLimit, 0, 1);
+            midPointVisualObject.localPosition = new Vector3(0, 0, midPointLocalSpace.z); // Dont move on x or y axis
         }
     }
+
+    private float Remap(float value, int fromMin, float fromMax, int toMin, int toMax)
+    {
+        return (value - fromMin) / (fromMax - fromMin) * (toMax - toMin) + toMin; // Recalculate the value
+    }
+
 
     private void HandleStringPulledBackTolimit(float midPointLocalZAbs, Vector3 midPointLocalSpace)
     {
         //We specify max pulling limit for the string. We don't allow the string to go any farther than "bowStringStretchLimit"
         if (midPointLocalSpace.z < 0 && midPointLocalZAbs >= bowStringStretchLimit)
         {
+            strength = 1; // Max strength
             //Vector3 direction = midPointParent.TransformDirection(new Vector3(0, 0, midPointLocalSpace.x));
             midPointVisualObject.localPosition = new Vector3(0, 0, -bowStringStretchLimit);
         }
@@ -90,7 +110,8 @@ public class BowController : MonoBehaviour
     {
         if (midPointLocalSpace.z >= 0)
         {
-            midPointVisualObject.localPosition = Vector3.zero;
+            strength = 0;
+            midPointVisualObject.localPosition = Vector3.zero; // Reset to original position
         }
     }
 }
