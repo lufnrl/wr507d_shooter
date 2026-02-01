@@ -25,7 +25,7 @@ public class ArrowSideSwitcher : MonoBehaviour
             Vector3 pos = arrow.localPosition;
 
             // On définit le facteur : 1 pour Droitier, -1 pour Gaucher
-            float sideFactor = isRightHand ? -1f : 1f;
+            float sideFactor = isRightHand ? 1f : -1f;
 
             // On prend la valeur absolue et on applique le signe
             pos.x = Mathf.Abs(pos.x) * sideFactor;
