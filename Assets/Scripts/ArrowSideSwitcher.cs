@@ -10,7 +10,7 @@ public class ArrowSideSwitcher : MonoBehaviour
 
     public void UpdateArrowSide(SelectEnterEventArgs args)
     {
-        Debug.Log("Objet qui attrape : " + args.interactorObject.transform.name + " | Tag : " + args.interactorObject.transform.tag);
+        // Debug.Log("Objet qui attrape : " + args.interactorObject.transform.name + " | Tag : " + args.interactorObject.transform.tag);
 
         // On identifie qui a attrapé l'arc (le "Interactor")
         Transform handTransform = args.interactorObject.transform; // args.interactorObject est la main. On regarde son Transform.
@@ -32,7 +32,7 @@ public class ArrowSideSwitcher : MonoBehaviour
 
             arrow.localPosition = pos;
 
-            Debug.Log(isRightHand ? "Mode Gaucher : Flèche à Droite (+)" : "Mode Droitier : Flèche à Gauche (-)");
+            // Debug.Log(isRightHand ? "Mode Gaucher : Flèche à Droite (+)" : "Mode Droitier : Flèche à Gauche (-)");
         }
     }
     
