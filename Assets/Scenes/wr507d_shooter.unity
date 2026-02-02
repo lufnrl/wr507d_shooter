@@ -193,7 +193,7 @@ PrefabInstance:
     - target: {fileID: 6598815579406187037, guid: 18ddb545287c546e19cc77dc9fbb2189,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -633,7 +633,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: c1eaf8ec04fad3c4797894b22651df34, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -1606,7 +1606,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: ea4dfbaf8e8591f409dea185e6786bc0, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 0.6
   m_Pitch: 1
   Loop: 0
@@ -2583,6 +2583,7 @@ MonoBehaviour:
   arrowSpawnPoint: {fileID: 1280569496}
   arrowMaxSpeed: 10
   bowReleaseAudioSource: {fileID: 958155155}
+  maxArrows: 5
 --- !u!114 &1396144047
 MonoBehaviour:
   m_ObjectHideFlags: 0
