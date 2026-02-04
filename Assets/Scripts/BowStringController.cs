@@ -57,7 +57,7 @@ public class BowStringController : MonoBehaviour
         }
         else
         {
-            Debug.Log("Pas de flèche ou pas assez de force.");
+            // Debug.Log("Pas de flèche ou pas assez de force.");
         }
 
         strength = 0;
@@ -87,7 +87,7 @@ public class BowStringController : MonoBehaviour
         {
             // If no arrow, cache visual but the string can be pulled
             if (arrowVisualMesh != null) arrowVisualMesh.SetActive(false);
-            Debug.Log("Carquois VIDE : Pas de flèche visuelle !");
+            // Debug.Log("Carquois VIDE : Pas de flèche visuelle !");
         }
     }
 

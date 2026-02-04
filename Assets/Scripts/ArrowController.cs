@@ -57,7 +57,7 @@ public class ArrowController : MonoBehaviour
         } 
         else
         {
-            Debug.Log("Plus de flèches ! Il faut recharger.");
+            // Debug.Log("Plus de flèches ! Il faut recharger.");
             // Here, add sound for empty state
         }
         
@@ -65,17 +65,18 @@ public class ArrowController : MonoBehaviour
 
     void UpdateArrowsNumberDisplay()
     {
-        Debug.Log($"Munitions : {currentArrowCount} / {maxArrows}");
+        // Debug.Log($"Munitions : {currentArrowCount} / {maxArrows}");
 
-        if(arrowsNumberText != null)
-        {
-            arrowsNumberText.text = $"{currentArrowCount}";
+        arrowsNumberText.text = $"{currentArrowCount}";
             
-            // Change color if empty
-            if (currentArrowCount == 0) 
-                arrowsNumberText.color = Color.red;
-            else 
-                arrowsNumberText.color = Color.white;
+        // Change color if empty
+        if (currentArrowCount == 0)
+        {
+            arrowsNumberText.color = Color.red;
+        }
+        else 
+        {
+            arrowsNumberText.color = Color.white;
         }
     }
 
@@ -93,6 +94,7 @@ public class ArrowController : MonoBehaviour
     public void Reload()
     {
         currentArrowCount = maxArrows;
-        Debug.Log("Rechargement effectué !");
+        UpdateArrowsNumberDisplay();
+        // Debug.Log("Rechargement effectué !");
     }
 }
