@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
+using TMPro;
 
 public class ArrowController : MonoBehaviour
 {
@@ -17,13 +18,16 @@ public class ArrowController : MonoBehaviour
     public int maxArrows = 5;       // Capacity of the quiver
     private int currentArrowCount;   // Remaining arrows
 
-    // Pour savoir combien on en a tiré au total (pour les stats de fin de jeu par exemple)
+    public TextMeshPro arrowsNumberText;
+
+    // To know how many shooted arrows in global (for stats at the end of a game for example)
     // private int totalArrowsFired = 0;
 
     private void Start()
     {
         // Fill the quiver at the start
         currentArrowCount = maxArrows;
+        UpdateArrowsNumberDisplay(); // To display the initial arrow count
     }
 
     public void PrepareArrow()
@@ -47,17 +51,42 @@ public class ArrowController : MonoBehaviour
             rb.AddForce(midPointVisual.transform.forward * strength * arrowMaxSpeed, ForceMode.Impulse);
 
             currentArrowCount--;
+            UpdateArrowsNumberDisplay();
             // totalArrowsFired++;
 
-            // Debug.Log($"Flèche tirée ! Restantes : {currentArrowCount} / Total tiré : {totalArrowsFired}");
-            Debug.Log($"Flèche tirée ! Restantes : {currentArrowCount}");
         } 
         else
         {
-            Debug.Log("CLIC ! Plus de flèches ! Il faut recharger.");
-            // Ici, tu pourras ajouter un petit son "Clic" (arme vide) plus tard
+            Debug.Log("Plus de flèches ! Il faut recharger.");
+            // Here, add sound for empty state
         }
         
+    }
+
+    void UpdateArrowsNumberDisplay()
+    {
+        Debug.Log($"Munitions : {currentArrowCount} / {maxArrows}");
+
+        if(arrowsNumberText != null)
+        {
+            arrowsNumberText.text = $"{currentArrowCount}";
+            
+            // Change color if empty
+            if (currentArrowCount == 0) 
+                arrowsNumberText.color = Color.red;
+            else 
+                arrowsNumberText.color = Color.white;
+        }
+    }
+
+    public bool HasArrows()
+    {
+        return currentArrowCount > 0;
+    }
+
+    public bool IsQuiverFull()
+    {
+        return currentArrowCount >= maxArrows;
     }
 
     // Reload arrows in quiver

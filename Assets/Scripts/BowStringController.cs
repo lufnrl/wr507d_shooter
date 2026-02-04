@@ -16,7 +16,7 @@ public class BowStringController : MonoBehaviour
 
 
     [SerializeField]
-    private float bowStringStretchLimit = 0.3f;
+    private float bowStringStretchLimit = 0.28f;
 
     private Transform interactor;
 
@@ -28,8 +28,12 @@ public class BowStringController : MonoBehaviour
     [SerializeField]
     private AudioSource audioSource;
 
+    [SerializeField] private ArrowController arrowController;
+    [SerializeField] private GameObject arrowVisualMesh;
+
     public UnityEvent OnBowPulled; // Allow string visualization
     public UnityEvent<float> OnBowReleased; // The moment we shoot
+
 
 
     private void Awake()
@@ -47,7 +51,15 @@ public class BowStringController : MonoBehaviour
 
     private void ResetBowString(SelectExitEventArgs arg0)
     {
-        OnBowReleased?.Invoke(strength);
+        if (arrowController != null && arrowController.HasArrows() && strength > 0.1f) // Little dead zone
+        {
+            OnBowReleased?.Invoke(strength); // Call ReleaseArrow in another script
+        }
+        else
+        {
+            Debug.Log("Pas de flèche ou pas assez de force.");
+        }
+
         strength = 0;
         previousStrength = 0;
         audioSource.pitch = 1;
@@ -58,12 +70,25 @@ public class BowStringController : MonoBehaviour
         midPointVisualObject.localPosition = Vector3.zero;
         bowStringRenderer.CreateString(null); // Recreate the string straight
 
+        // Cache visual arrow
+        if (arrowVisualMesh != null) arrowVisualMesh.SetActive(false);
     }
 
     private void PrepareBowString(SelectEnterEventArgs arg0)
     {
         interactor = arg0.interactorObject.transform;
-        OnBowPulled?.Invoke(); // Make appear the string visualization
+
+        if (arrowController != null && arrowController.HasArrows())
+        {
+            OnBowPulled?.Invoke();  // Make appear the string visualization
+            if (arrowVisualMesh != null) arrowVisualMesh.SetActive(true);
+        }
+        else
+        {
+            // If no arrow, cache visual but the string can be pulled
+            if (arrowVisualMesh != null) arrowVisualMesh.SetActive(false);
+            Debug.Log("Carquois VIDE : Pas de flèche visuelle !");
+        }
     }
 
 
@@ -71,11 +96,11 @@ public class BowStringController : MonoBehaviour
     {
         if (interactor != null)
         {
-            //convert bow string mid point position to the local space of the MidPoint
+            // Convert bow string mid point position to the local space of the MidPoint
             Vector3 midPointLocalSpace = 
                 midPointParent.InverseTransformPoint(midPointGrabObject.position); // can also take localPosition
 
-            //get the offset
+            //Get the offset
             float midPointLocalZAbs = Mathf.Abs(midPointLocalSpace.z);
 
             previousStrength = strength;
@@ -92,7 +117,7 @@ public class BowStringController : MonoBehaviour
 
     private void HandlePullingString(float midPointLocalZAbs, Vector3 midPointLocalSpace)
     {
-        //what happens when we are between point 0 and the string pull limit
+        // what happens when we are between point 0 and the string pull limit
         if (midPointLocalSpace.z < 0 && midPointLocalZAbs < bowStringStretchLimit)
         {
             if (audioSource.isPlaying == false && strength <= 0.01f)
@@ -109,24 +134,24 @@ public class BowStringController : MonoBehaviour
 
     private void PlayStringPullinSound()
     {
-        //Check if we have moved the string enought to play the sound unpause it
+        // Check if we have moved the string enought to play the sound unpause it
         if (Mathf.Abs(strength - previousStrength) > stringSoundThreshold)
         {
             if (strength < previousStrength)
             {
-                //Play string sound in reverse if we are pusing the string towards the bow
+                // Play string sound in reverse if we are pusing the string towards the bow
                 audioSource.pitch = -1;
             }
             else
             {
-                //Play the sound normally
+                // Play the sound normally
                 audioSource.pitch = 1;
             }
             audioSource.UnPause();
         }
         else
         {
-            //if we stop moving Pause the sounds
+            // If we stop moving Pause the sounds
             audioSource.Pause();
         }
 
@@ -140,12 +165,11 @@ public class BowStringController : MonoBehaviour
 
     private void HandleStringPulledBackTolimit(float midPointLocalZAbs, Vector3 midPointLocalSpace)
     {
-        //We specify max pulling limit for the string. We don't allow the string to go any farther than "bowStringStretchLimit"
+        // We specify max pulling limit for the string. We don't allow the string to go any farther than "bowStringStretchLimit"
         if (midPointLocalSpace.z < 0 && midPointLocalZAbs >= bowStringStretchLimit)
         {
             audioSource.Pause();
             strength = 1; // Max strength
-            //Vector3 direction = midPointParent.TransformDirection(new Vector3(0, 0, midPointLocalSpace.x));
             midPointVisualObject.localPosition = new Vector3(0, 0, -bowStringStretchLimit);
         }
     }
