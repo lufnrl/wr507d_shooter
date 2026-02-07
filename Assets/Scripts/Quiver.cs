@@ -7,6 +7,20 @@ public class Quiver : MonoBehaviour
     public AudioSource audioSource;
     public AudioClip reloadSound;
 
+
+    // Function to make vibrate feedback when player enters the quiver zone
+    private void TriggerHaptic(Collider handCollider)
+    {
+        // Get controller form the hand collider
+        var controller = handCollider.GetComponentInParent<ActionBasedController>();
+        
+        if (controller != null)
+        {
+            // Intensity (0 to 1) and last (in secondes)
+            controller.SendHapticImpulse(0.5f, 0.1f); 
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         // Debug.Log("OnTriggerEnter carquois détecté avec : " + other.name);
@@ -18,6 +32,10 @@ public class Quiver : MonoBehaviour
             || other.CompareTag("LeftHand")
             || (other.transform.parent != null && other.transform.parent.CompareTag("LeftHand")))
         {
+
+            // Vibrate to say "Zone trouvée !"
+            TriggerHaptic(other);
+
             // Reload by contact for simplicity
             ReloadArrows();
         }

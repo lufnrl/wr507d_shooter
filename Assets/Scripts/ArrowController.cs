@@ -20,6 +20,9 @@ public class ArrowController : MonoBehaviour
 
     public TextMeshPro arrowsNumberText;
 
+    public GameObject tutorialCanvas;
+    private bool hasShownTutorial = false; // To show it only once
+
     // To know how many shooted arrows in global (for stats at the end of a game for example)
     // private int totalArrowsFired = 0;
 
@@ -54,6 +57,10 @@ public class ArrowController : MonoBehaviour
             UpdateArrowsNumberDisplay();
             // totalArrowsFired++;
 
+            if (currentArrowCount == 0 && !hasShownTutorial)
+            {
+                ShowReloadTutorial();
+            }
         } 
         else
         {
@@ -96,5 +103,23 @@ public class ArrowController : MonoBehaviour
         currentArrowCount = maxArrows;
         UpdateArrowsNumberDisplay();
         // Debug.Log("Rechargement effectué !");
+
+        // Cache tutorial if player succed to reload after seeing it
+        if (tutorialCanvas != null && tutorialCanvas.activeSelf)
+        {
+            tutorialCanvas.SetActive(false);
+        }
+    }
+
+    void ShowReloadTutorial()
+    {
+        tutorialCanvas.SetActive(true); // Display tutorial canvas
+        hasShownTutorial = true; // Check it only once
+
+        Transform head = Camera.main.transform; // Assuming the main camera is the player's head
+
+        tutorialCanvas.transform.position = head.position + (head.forward * 1.5f); // Position = head + 1.5 meter forward
+        tutorialCanvas.transform.LookAt(head); // Canvas look at the player
+        tutorialCanvas.transform.Rotate(0, 180, 0); // Rotate around y axis to face the player correctly
     }
 }
