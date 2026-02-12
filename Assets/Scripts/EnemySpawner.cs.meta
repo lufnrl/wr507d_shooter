@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: a851200c0d35b4200b1bb6b253b328f0
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - moutonPrefab: {fileID: 6517686061769116559, guid: f32fc89859f16ec49bc857008a5ed9c5,
+      type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
