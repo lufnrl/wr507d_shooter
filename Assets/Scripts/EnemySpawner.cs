@@ -161,14 +161,14 @@ public class EnemySpawner : MonoBehaviour
             Transform cameraOffset = playerCamera.parent;
             // Reset the Camera Offset rotation to face forward (0, 0, 0)
             cameraOffset.localRotation = Quaternion.identity;
-            Debug.Log($"Reset {cameraOffset.name} rotation to face forward");
+            // Debug.Log($"Reset {cameraOffset.name} rotation to face forward");
             
             // Also reset the XR Origin/Rig (parent of Camera Offset) if it exists
             if (cameraOffset.parent != null)
             {
                 Transform xrOrigin = cameraOffset.parent;
                 xrOrigin.localRotation = Quaternion.identity;
-                Debug.Log($"Reset {xrOrigin.name} rotation to face forward");
+                // Debug.Log($"Reset {xrOrigin.name} rotation to face forward");
             }
         }
         
@@ -179,7 +179,7 @@ public class EnemySpawner : MonoBehaviour
         if (mainCamera != null)
         {
             mainCamera.clearFlags = CameraClearFlags.Skybox;
-            Debug.Log("Camera configured for skybox rendering");
+            // Debug.Log("Camera configured for skybox rendering");
         }
         
         // Find or create the main directional light (sun)
@@ -203,7 +203,7 @@ public class EnemySpawner : MonoBehaviour
             // Position the sun (rotation determines light direction)
             sunObject.transform.rotation = Quaternion.Euler(50f, -30f, 0f);
             
-            Debug.Log("Created new Directional Light for sunny day");
+            // Debug.Log("Created new Directional Light for sunny day");
         }
         
         // Configure the light for pleasant sunny day
@@ -215,7 +215,7 @@ public class EnemySpawner : MonoBehaviour
         // Store original values
         originalLightIntensity = mainLight.intensity;
         originalLightColor = mainLight.color;
-        Debug.Log($"Sun configured with intensity: {originalLightIntensity}, color: {originalLightColor}");
+        // Debug.Log($"Sun configured with intensity: {originalLightIntensity}, color: {originalLightColor}");
         
         // Set up bright sunny environment lighting
         RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Skybox;
@@ -228,19 +228,19 @@ public class EnemySpawner : MonoBehaviour
             RenderSettings.skybox.SetFloat("_Exposure", 1.1f); // Pleasant sky brightness
             RenderSettings.sun = mainLight; // Set the sun source
             originalSkyboxExposure = 1.1f;
-            Debug.Log($"Skybox configured with exposure: {originalSkyboxExposure}");
+            // Debug.Log($"Skybox configured with exposure: {originalSkyboxExposure}");
         }
         else
         {
             originalSkyboxExposure = 1.1f;
-            Debug.LogWarning("No skybox material found! Go to Window > Rendering > Lighting > Environment and assign a Skybox Material");
+            // Debug.LogWarning("No skybox material found! Go to Window > Rendering > Lighting > Environment and assign a Skybox Material");
         }
         
         // Store original ambient light and fog color
         originalAmbientLight = RenderSettings.ambientLight;
         originalFogColor = RenderSettings.fogColor;
         
-        Debug.Log($"Sunny day setup complete! Ambient mode: {RenderSettings.ambientMode}");
+        // Debug.Log($"Sunny day setup complete! Ambient mode: {RenderSettings.ambientMode}");
         
         // Initialize wave system
         currentWaveDelay = timeBetweenWaves;
@@ -262,7 +262,7 @@ public class EnemySpawner : MonoBehaviour
             
             if (regularAlienCount == 0)
             {
-                Debug.Log("All regular aliens defeated! Final boss rising...");
+                // Debug.Log("All regular aliens defeated! Final boss rising...");
                 StartCoroutine(ActivateFinalBoss());
                 bossActivated = true;
             }
@@ -302,7 +302,7 @@ public class EnemySpawner : MonoBehaviour
             int remainingAliens = maxTotalAliens - totalAliensSpawned;
             enemiesToSpawn = Mathf.Min(enemiesToSpawn, remainingAliens);
             
-            Debug.Log($"Wave {currentWaveNumber}: Spawning {enemiesToSpawn} enemies ({totalAliensSpawned + enemiesToSpawn}/{maxTotalAliens} total)");
+            // Debug.Log($"Wave {currentWaveNumber}: Spawning {enemiesToSpawn} enemies ({totalAliensSpawned + enemiesToSpawn}/{maxTotalAliens} total)");
             
             // Spawn all enemies in this wave with small delays between them
             for (int i = 0; i < enemiesToSpawn; i++)
@@ -320,7 +320,7 @@ public class EnemySpawner : MonoBehaviour
             // Check if we've reached the limit
             if (totalAliensSpawned >= maxTotalAliens)
             {
-                Debug.Log($"All {maxTotalAliens} aliens have been spawned! Final boss will rise after they're defeated...");
+                // Debug.Log($"All {maxTotalAliens} aliens have been spawned! Final boss will rise after they're defeated...");
                 allWavesCompleted = true;
                 break;
             }
@@ -341,7 +341,7 @@ public class EnemySpawner : MonoBehaviour
         // Check if we have any OVNI prefabs
         if (ovniPrefabs == null || ovniPrefabs.Length == 0)
         {
-            Debug.LogError("No OVNI prefabs assigned to EnemySpawner!");
+            // Debug.LogError("No OVNI prefabs assigned to EnemySpawner!");
             return;
         }
 
@@ -415,7 +415,7 @@ public class EnemySpawner : MonoBehaviour
         
         if (finalBossInstance == null)
         {
-            Debug.LogError("OVNI_3_final not found in scene!");
+            // Debug.LogError("OVNI_3_final not found in scene!");
             return;
         }
         
@@ -426,14 +426,14 @@ public class EnemySpawner : MonoBehaviour
             bossHover.enabled = false;
         }
         
-        Debug.Log("Final boss found in scene and ready to activate");
+        // Debug.Log("Final boss found in scene and ready to activate");
     }
     
     private IEnumerator ActivateFinalBoss()
     {
         if (finalBossInstance == null) yield break;
         
-        Debug.Log("Final boss rising!");
+        // Debug.Log("Final boss rising!");
         
         // Play boss music from the beginning
         if (bossMusicSound != null)
@@ -457,12 +457,12 @@ public class EnemySpawner : MonoBehaviour
             yield return null;
         }
         
-        Debug.Log("Final boss reached peak - waiting before attack...");
+        // Debug.Log("Final boss reached peak - waiting before attack...");
         
         // Wait at the top for a few seconds (menacing pause)
         yield return new WaitForSeconds(3f);
         
-        Debug.Log("Final boss moving in front of player!");
+        // Debug.Log("Final boss moving in front of player!");
         
         // Phase 2: Move to a position in front of the player, keeping current height
         Vector3 playerPosition = Camera.main.transform.position;
@@ -503,7 +503,7 @@ public class EnemySpawner : MonoBehaviour
         // Mark boss as fully active
         bossFullyActive = true;
         
-        Debug.Log("Final boss starting to abduct ALL remaining sheep!");
+        // Debug.Log("Final boss starting to abduct ALL remaining sheep!");
         
         // Start abducting all sheep at once
         StartCoroutine(BossAbductAllSheep());
@@ -550,7 +550,7 @@ public class EnemySpawner : MonoBehaviour
             }
         }
         
-        Debug.Log($"Boss is lifting {sheepObjects.Count} sheep!");
+        // Debug.Log($"Boss is lifting {sheepObjects.Count} sheep!");
         
         float rotationSpeed = 60f; // Boss rotation speed
         float abductionTimer = 0f; // Track abduction time
@@ -591,7 +591,7 @@ public class EnemySpawner : MonoBehaviour
                 {
                     Destroy(sheepObjects[i]);
                     sheepObjects.RemoveAt(i);
-                    Debug.Log($"Sheep abducted! {sheepObjects.Count} remaining");
+                    // Debug.Log($"Sheep abducted! {sheepObjects.Count} remaining");
                 }
             }
             
@@ -607,7 +607,7 @@ public class EnemySpawner : MonoBehaviour
             }
         }
         
-        Debug.Log("Boss has abducted all sheep!");
+        // Debug.Log("Boss has abducted all sheep!");
     }
     
     public void StopBossEffects()
@@ -652,7 +652,7 @@ public class EnemySpawner : MonoBehaviour
         
         if (rigTransform == null)
         {
-            Debug.LogWarning("Camera has no parent - cannot shake in VR mode");
+            // Debug.LogWarning("Camera has no parent - cannot shake in VR mode");
             yield break;
         }
         
@@ -685,7 +685,7 @@ public class EnemySpawner : MonoBehaviour
         float targetSkyboxExposure = originalSkyboxExposure * 0.25f; // Dim skybox a lot
         float targetIntensity = originalLightIntensity * lightDimAmount;
         
-        Debug.Log($"Dimming from sunny day - Light: {originalLightIntensity} to {targetIntensity}, Ambient: {originalAmbientLight} to {darkerAmbient}");
+        // Debug.Log($"Dimming from sunny day - Light: {originalLightIntensity} to {targetIntensity}, Ambient: {originalAmbientLight} to {darkerAmbient}");
         
         // Dim everything over the duration
         while (elapsed < duration)
@@ -736,7 +736,7 @@ public class EnemySpawner : MonoBehaviour
             RenderSettings.skybox.SetFloat("_Exposure", targetSkyboxExposure);
         }
         
-        Debug.Log("Scene darkened - menacing atmosphere active!");
+        // Debug.Log("Scene darkened - menacing atmosphere active!");
     }
 }
 
@@ -853,16 +853,16 @@ public class FlyingSaucerHover : MonoBehaviour
             beamObject.transform.position = beamWorldPos;
             beamObject.transform.rotation = beamWorldRot;
             
-            Debug.Log($"Beam wrapper created at position: {beamOriginalPosition}, scale: {beamOriginalScale}");
+            // Debug.Log($"Beam wrapper created at position: {beamOriginalPosition}, scale: {beamOriginalScale}");
             
             // Completely hide the beam initially
             HideBeam();
             
-            Debug.Log($"Beam found in {gameObject.name} with {beamRenderers.Length} renderers");
+            // Debug.Log($"Beam found in {gameObject.name} with {beamRenderers.Length} renderers");
         }
         else
         {
-            Debug.LogWarning($"Beam object not found in {gameObject.name} hierarchy!");
+            // Debug.LogWarning($"Beam object not found in {gameObject.name} hierarchy!");
         }
         
         // Setup audio
@@ -1251,7 +1251,7 @@ public class FlyingSaucerHover : MonoBehaviour
         else
         {
             // If no moutons found, just stay hovering
-            Debug.LogWarning("No mouton instances found in scene!");
+            // Debug.LogWarning("No mouton instances found in scene!");
             isAttacking = false;
         }
     }
