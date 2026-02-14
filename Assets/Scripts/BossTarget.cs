@@ -1,43 +1,45 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI; // Obligatoire pour parler à l'Image de la barre de vie
+using UnityEngine.UI; // Mandatory to speak to the Image of the life bar
 
 public class BossTarget : MonoBehaviour, IHittable
 {
     [Header("Statistiques")]
-    public int maxHealth = 6; // Nombre de flèches pour le tuer
+    public int maxHealth = 6; // Number of arrows to kill him
     private int currentHealth;
     public int bossPointsValue = 500;
 
     [Header("Mécanique de Bouclier")]
-    public int shieldMaxHealth = 3; // Flèches nécessaires pour casser le bouclier
+    public int shieldMaxHealth = 3; // Arrows needed to break the shield
     private int currentShieldHealth;
-    public float vulnerableDuration = 8f; // Temps en secondes avant que le bouclier revienne
-    public GameObject shieldVisual; // Glisse ici ta sphère ShieldVisual
+    public float vulnerableDuration = 8f; // Time in seconds before the shield returns
+    public GameObject shieldVisual;
     
-    // Optionnel : Des petits sons pour bien comprendre ce qu'il se passe
-    public AudioClip shieldHitSound;   // Quand on tape le bouclier
-    public AudioClip shieldBreakSound; // Quand le bouclier explose (vulnérable !)
-    public AudioClip shieldRegenSound; // Quand le bouclier se reforme
+    [Header("Paramètres Audio")]
+    [Range(0f, 1f)] 
+    public float soundVolume = 0.5f;
+    public AudioClip shieldHitSound;   // When we tap the shield
+    public AudioClip shieldBreakSound; // When the shield explodes
+    public AudioClip shieldRegenSound; // When the shield is reformed
     
-    private bool isShieldActive = true; // Le boss commence avec son bouclier allumé !
+    private bool isShieldActive = true; // The boss starts with his shield on
 
     [Header("Interface (UI)")]
-    public Image healthBarFill; // Glisse ici ton image "Fill" rouge/verte
-    public GameObject healthBarCanvas; // Glisse le Canvas entier ici pour le cacher à la fin
+    public Image healthBarFill;
+    public GameObject healthBarCanvas;
 
     [Header("Death effects")]
-    public GameObject explosionPrefab; // Un effet de particules (optionnel)
-    public AudioClip explosionSound;   // Le son d'une petite explosion
-    public float deathSequenceDuration = 2f; // L'animation de mort dure 2 secondes
-    public int numberOfExplosions = 6; // Il y aura 6 petites explosions
+    public GameObject explosionPrefab; // A particle effect
+    public AudioClip explosionSound;   // The sound of an explosion
+    public float deathSequenceDuration = 2f; // The death animation lasts 2 seconds
+    public int numberOfExplosions = 6; // Number ofexplosions
 
     private bool isDead = false;
 
     void Start()
     {
         currentHealth = maxHealth;
-        currentShieldHealth = shieldMaxHealth; // On charge le bouclier
+        currentShieldHealth = shieldMaxHealth; // Charge the shield
         UpdateHealthBar();
 
         if (healthBarCanvas != null)
@@ -45,7 +47,7 @@ public class BossTarget : MonoBehaviour, IHittable
             healthBarCanvas.SetActive(false);
         }
 
-        // On s'assure que le visuel du bouclier est bien allumé au départ
+        // Make sure that the shield visual is well lit at the start
         if (shieldVisual != null) shieldVisual.SetActive(true);
     }
 
@@ -54,21 +56,23 @@ public class BossTarget : MonoBehaviour, IHittable
         // Boss being exploded, ignore news arrows
         if (isDead) return; 
 
-        // 1. SI LE BOUCLIER EST ACTIF
+        // If the shiled is active
         if (isShieldActive)
         {
             currentShieldHealth--;
-            
-            // Joue un son de "Klang" métallique/énergétique
-            if (shieldHitSound != null) AudioSource.PlayClipAtPoint(shieldHitSound, transform.position);
 
-            // Si on a cassé le bouclier !
+            PlaySoundInEars(shieldHitSound);
+            
+            // Plau sound
+            // if (shieldHitSound != null) AudioSource.PlayClipAtPoint(shieldHitSound, transform.position);
+
+            // If the shield is broken
             if (currentShieldHealth <= 0)
             {
                 BreakShield();
             }
         }
-        // 2. SI LE BOUCLIER EST CASSÉ (Le Boss prend cher !)
+        // If the shield is broken
         else
         {
             // Show health bar at first hit
@@ -92,30 +96,32 @@ public class BossTarget : MonoBehaviour, IHittable
     {
         isShieldActive = false;
         
-        // On cache la bulle
+        // Hide the shield visual
         if (shieldVisual != null) shieldVisual.SetActive(false);
         
-        // On joue le son de bris de glace/énergie
-        if (shieldBreakSound != null) AudioSource.PlayClipAtPoint(shieldBreakSound, transform.position);
+        // Play the sound of breaking the shield
+        PlaySoundInEars(shieldBreakSound);
+        // if (shieldBreakSound != null) AudioSource.PlayClipAtPoint(shieldBreakSound, transform.position);
         
-        // On lance le chrono pour le régénérer
+        // Start the stopwatch to regenerate it
         StartCoroutine(ShieldRegenTimer());
     }
 
     private IEnumerator ShieldRegenTimer()
     {
-        // On attend la durée de vulnérabilité (ex: 8 secondes)
+        // Wait for the duration of vulnerability
         yield return new WaitForSeconds(vulnerableDuration);
         
-        // Si le boss a été tué pendant ce temps, on annule la régénération !
+        // If the boss was killed during this time, we cancel the regeneration
         if (isDead) yield break;
 
-        // Le bouclier est de retour !
+        // Shield is back
         isShieldActive = true;
-        currentShieldHealth = shieldMaxHealth; // On lui remet ses points de vie
+        currentShieldHealth = shieldMaxHealth; // Put back his health points
         
         if (shieldVisual != null) shieldVisual.SetActive(true);
-        if (shieldRegenSound != null) AudioSource.PlayClipAtPoint(shieldRegenSound, transform.position);
+        PlaySoundInEars(shieldRegenSound);
+        // if (shieldRegenSound != null) AudioSource.PlayClipAtPoint(shieldRegenSound, transform.position);
     }
 
     private void UpdateHealthBar()
@@ -138,7 +144,7 @@ public class BossTarget : MonoBehaviour, IHittable
         Collider col = GetComponent<Collider>();
         if (col != null) col.enabled = false;
 
-        // (Si ton boss bougeait, c'est ici qu'il faut désactiver son script de mouvement pour qu'il s'arrête en l'air)
+        // (If the boss was moving, this is where you have to disable his movement script so that it stops in the air.)
         // ex: GetComponent<BossMovement>().enabled = false;
 
         // Explosion loop
@@ -157,10 +163,11 @@ public class BossTarget : MonoBehaviour, IHittable
             }
 
             // Play explosion sound
-            if (explosionSound != null)
-            {
-                AudioSource.PlayClipAtPoint(explosionSound, explosionPos);
-            }
+            // if (explosionSound != null)
+            // {
+            //     AudioSource.PlayClipAtPoint(explosionSound, explosionPos);
+            // }
+            PlaySoundInEars(explosionSound);
 
             // Takes a break before the next explosion
             yield return new WaitForSeconds(delayBetweenExplosions);
@@ -174,5 +181,13 @@ public class BossTarget : MonoBehaviour, IHittable
 
         // Destroy boss -> Win screen
         Destroy(gameObject);
+    }
+
+    private void PlaySoundInEars(AudioClip clip)
+    {
+        if (clip != null && Camera.main != null)
+        {
+            AudioSource.PlayClipAtPoint(clip, Camera.main.transform.position, soundVolume);
+        }
     }
 }

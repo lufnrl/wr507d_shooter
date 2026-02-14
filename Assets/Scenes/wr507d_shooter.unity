@@ -2425,6 +2425,11 @@ PrefabInstance:
       objectReference: {fileID: 44115748}
     - target: {fileID: 5280620655529476618, guid: cc9bb0a65099d5546a9ca709b8129d8d,
         type: 3}
+      propertyPath: m_VersionIndex
+      value: 28
+      objectReference: {fileID: 0}
+    - target: {fileID: 5280620655529476618, guid: cc9bb0a65099d5546a9ca709b8129d8d,
+        type: 3}
       propertyPath: m_Tangents.Array.data[12].x
       value: NaN
       objectReference: {fileID: 0}
