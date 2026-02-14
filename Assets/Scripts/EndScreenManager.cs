@@ -7,6 +7,7 @@ public class EndScreenManager : MonoBehaviour
     public TextMeshProUGUI gameOverText;
     public UnityEngine.UI.RawImage gameOverBackground;
     public GameObject restartButton;
+    [SerializeField] public int sheepBonusValue = 100;
     
     private bool gameOverShown = false;
     private bool gameWon = false;
@@ -60,8 +61,24 @@ public class EndScreenManager : MonoBehaviour
     private void ShowWinScreen(int sheepCount)
     {
         gameWon = true;
+
+        int baseScore = 0;
+        if (ScoreManager.Instance != null)
+        {
+            baseScore = ScoreManager.Instance.currentScore;
+        }
+
+        int sheepBonus = sheepCount * sheepBonusValue; // Calculate bonus
+        int finalTotalScore = baseScore + sheepBonus; // Calculate total
         
-        ShowEndScreen($"<size=60>You Win !</size>\n<size=30>Score: 0\n +{sheepCount} sheep saved</size>\n<size=60>= {sheepCount}</size>", new Color32(0x62, 0x2E, 0x03, 0xFF));
+        // Inject in text with formatage
+        ShowEndScreen(
+            $"<size=60>You Win !</size>\n" +
+            $"<size=30>Score : {baseScore}\n" +
+            $"+{sheepCount} sheep saved ({sheepBonus} pts)</size>\n" +
+            $"<size=60>Total = {finalTotalScore}</size>", 
+            new Color32(0x62, 0x2E, 0x03, 0xFF)
+        );
     }
 
     private void ShowLoseScreen()

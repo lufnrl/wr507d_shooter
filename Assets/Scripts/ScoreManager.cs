@@ -8,7 +8,7 @@ public class ScoreManager : MonoBehaviour
     // Singleton : Allow to access the script anywhere with "ScoreManager.Instance"
     public static ScoreManager Instance;
     public TextMeshProUGUI scoreText;
-    private int currentScore = 0;
+    public int currentScore = 0;
 
     private void Awake()
     {
