@@ -3,6 +3,7 @@ using TMPro;
 
 public class EndScreenManager : MonoBehaviour
 {
+    public Canvas endScreenCanvas;
     public TextMeshProUGUI gameOverText;
     public UnityEngine.UI.RawImage gameOverBackground;
     public GameObject restartButton;
@@ -23,6 +24,11 @@ public class EndScreenManager : MonoBehaviour
         if (restartButton != null)
         {
             restartButton.SetActive(false);
+        }
+        // On désactive tout le Canvas au départ, c'est plus propre
+        if (endScreenCanvas != null)
+        {
+            endScreenCanvas.gameObject.SetActive(false);
         }
     }
 
@@ -54,15 +60,12 @@ public class EndScreenManager : MonoBehaviour
     private void ShowWinScreen(int sheepCount)
     {
         gameWon = true;
-        gameOverShown = true;
         
         ShowEndScreen($"<size=60>You Win !</size>\n<size=30>Score: 0\n +{sheepCount} sheep saved</size>\n<size=60>= {sheepCount}</size>", new Color32(0x62, 0x2E, 0x03, 0xFF));
     }
 
     private void ShowLoseScreen()
     {
-        gameOverShown = true;
-        
         // Stop all boss effects immediately
         EnemySpawner spawner = FindObjectOfType<EnemySpawner>();
         if (spawner != null)
@@ -75,49 +78,48 @@ public class EndScreenManager : MonoBehaviour
 
     private void ShowEndScreen(string message, Color textColor)
     {
+        gameOverShown = true;
+
         // Stop all audio sources in the scene
         AudioSource[] allAudioSources = FindObjectsOfType<AudioSource>();
         foreach (AudioSource audioSource in allAudioSources)
         {
             audioSource.Stop();
         }
+
+        // Freeze all enemies and spawner
+        FreezeGame();
+
+        if (endScreenCanvas != null)
+        {
+            if (Camera.main != null)
+            {
+                Transform playerCamera = Camera.main.transform;
+                
+                Vector3 forward = playerCamera.forward;
+                forward.y = 0;
+                forward.Normalize();
+                
+                Vector3 screenPosition = playerCamera.position + forward * 3f;
+                screenPosition.y = playerCamera.position.y;
+                
+                endScreenCanvas.transform.position = screenPosition;
+                endScreenCanvas.transform.rotation = Quaternion.LookRotation(forward);
+
+                endScreenCanvas.transform.localScale = new Vector3(0.003f, 0.003f, 0.003f);
+                // Debug.LogWarning("CAMÉRA TROUVEE !");
+            }
+            // else
+            // {
+            //     Debug.LogWarning("CAMÉRA INTROUVABLE !");
+            // }
+            
+            // Activate Canvas
+            endScreenCanvas.gameObject.SetActive(true);
+        }
         
         if (gameOverText != null)
         {
-            // Position the end screen in world space in front of player (only on first show)
-            Canvas canvas = gameOverText.GetComponentInParent<Canvas>();
-            if (canvas != null && canvas.renderMode != RenderMode.WorldSpace)
-            {
-                Transform playerCamera = Camera.main.transform;
-                if (playerCamera != null)
-                {
-                    canvas.renderMode = RenderMode.WorldSpace;
-                    
-                    // Get player forward direction but keep it horizontal (ignore vertical tilt)
-                    Vector3 forward = playerCamera.forward;
-                    forward.y = 0;
-                    
-                    // If player is looking straight up/down, use the camera's right vector instead
-                    if (forward.magnitude < 0.1f)
-                    {
-                        forward = playerCamera.right;
-                        forward.y = 0;
-                    }
-                    
-                    forward.Normalize();
-                    
-                    // Position 3 meters in front of player at eye level
-                    Vector3 screenPosition = playerCamera.position + forward * 3f;
-                    // Use the player's current Y position for eye level
-                    screenPosition.y = playerCamera.position.y;
-                    
-                    canvas.transform.position = screenPosition;
-                    // Rotate to face the player using only horizontal rotation
-                    canvas.transform.rotation = Quaternion.LookRotation(forward);
-                    canvas.transform.localScale = Vector3.one * 0.003f;
-                }
-            }
-            
             gameOverText.gameObject.SetActive(true);
             gameOverText.text = message.ToLower();
             gameOverText.color = textColor;
@@ -134,7 +136,46 @@ public class EndScreenManager : MonoBehaviour
         {
             restartButton.SetActive(true);
         }
+    }
+
+    private void FreezeGame()
+    {
+        // Avoid new enemy spawn
+        EnemySpawner spawner = FindObjectOfType<EnemySpawner>();
+        if (spawner != null)
+        {
+            spawner.enabled = false; 
+        }
+
+        // Find all enemies and sheeps already in the scene
+        MoutonMovement[] tousLesMoutons = FindObjectsOfType<MoutonMovement>();
         
-        Time.timeScale = 0f;
+        foreach (MoutonMovement mouton in tousLesMoutons)
+        {
+            // Desactivate sheep script
+            mouton.enabled = false;
+
+            // IF sheeps use a NavMeshAgent (intelligent movement) :
+            UnityEngine.AI.NavMeshAgent agent = mouton.GetComponent<UnityEngine.AI.NavMeshAgent>();
+            if (agent != null)
+            {
+                agent.isStopped = true;
+            }
+
+            // IF sheeps use physic (Rigidbody) :
+            Rigidbody rb = mouton.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.velocity = Vector3.zero; // On annule sa vitesse
+                rb.isKinematic = true;      // On le fige dans les airs
+            }
+
+            // Freeze animation (optional)
+            Animator anim = mouton.GetComponent<Animator>();
+            if (anim != null)
+            {
+                anim.speed = 0f; // Pause the animation
+            }
+        }
     }
 }

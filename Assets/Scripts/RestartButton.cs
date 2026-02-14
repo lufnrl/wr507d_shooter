@@ -15,7 +15,7 @@ public class RestartButton : MonoBehaviour
         }
         else
         {
-            Debug.LogError("RestartButton script requires a Button component on the same GameObject!");
+            // Debug.LogError("RestartButton script requires a Button component on the same GameObject!");
         }
     }
 
