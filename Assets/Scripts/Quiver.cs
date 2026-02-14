@@ -3,9 +3,15 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class Quiver : MonoBehaviour
 {
-    public ArrowController arrowController; // Référence à ton script de gestion
+    public ArrowController arrowController; // Ref to manage script
     public AudioSource audioSource;
     public AudioClip reloadSound;
+
+    [Header("Paramètres du son")]
+    [Tooltip("Pitch minimum pour varier le son de prise de flèche")]
+    public float minPitch = 0.85f;
+    [Tooltip("Pitch maximum pour varier le son de prise de flèche")]
+    public float maxPitch = 1.15f;
 
 
     // Function to make vibrate feedback when player enters the quiver zone
@@ -51,14 +57,16 @@ public class Quiver : MonoBehaviour
             // Sound to confirm
             if (audioSource != null && reloadSound != null)
             {
+                // Generate random value betweenn minPitch and maxPitch
+                audioSource.pitch = Random.Range(minPitch, maxPitch);
+
+                // Optional : small variation in volume
+                audioSource.volume = Random.Range(0.8f, 1.0f);
+
                 audioSource.PlayOneShot(reloadSound);
             }
 
             // Debug.Log("Carquois rechargé !");
-        }
-        else
-        {
-            // Debug.Log("Carquois plein !");
         }
     }
 }
