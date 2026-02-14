@@ -8208,6 +8208,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4525731388257834989, guid: 86d6ad37c1685794dbedff3e484f6ba7,
+        type: 3}
+      propertyPath: m_RequestedTrackingOriginMode
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4747375582088345329, guid: 86d6ad37c1685794dbedff3e484f6ba7,
         type: 3}
       propertyPath: m_PresetInfoIsWorld
@@ -8241,7 +8246,7 @@ PrefabInstance:
     - target: {fileID: 8255306072718237694, guid: 86d6ad37c1685794dbedff3e484f6ba7,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.102
+      value: 0.028
       objectReference: {fileID: 0}
     - target: {fileID: 8255306072718237694, guid: 86d6ad37c1685794dbedff3e484f6ba7,
         type: 3}
@@ -11133,6 +11138,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2976246359086311358, guid: aab6a8a8805852f469c32ae245064e38,
         type: 3}
+      propertyPath: soundVolume
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2976246359086311358, guid: aab6a8a8805852f469c32ae245064e38,
+        type: 3}
       propertyPath: shieldVisual
       value: 
       objectReference: {fileID: 508163089}
@@ -11190,7 +11200,7 @@ PrefabInstance:
     - target: {fileID: 7123844043804875066, guid: aab6a8a8805852f469c32ae245064e38,
         type: 3}
       propertyPath: m_VersionIndex
-      value: 4589
+      value: 4592
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
