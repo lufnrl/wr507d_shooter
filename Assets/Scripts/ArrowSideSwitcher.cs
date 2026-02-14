@@ -1,38 +1,30 @@
-// using System.Collections;
-// using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit; // Nécessaire pour détecter les mains
+using UnityEngine.XR.Interaction.Toolkit; // Necessary to detect hands
 
 public class ArrowSideSwitcher : MonoBehaviour
 {
     public string rightHandTag = "RightHand";
-    public Transform arrow; // la flèche visible sur la corde avant le tir (contient le spawnPoint)
+    public Transform arrow; // The arrow visible on the rope before the shot (contains the spawnPoint)
 
     public void UpdateArrowSide(SelectEnterEventArgs args)
     {
-        // Debug.Log("Objet qui attrape : " + args.interactorObject.transform.name + " | Tag : " + args.interactorObject.transform.tag);
-
-        // On identifie qui a attrapé l'arc (le "Interactor")
-        Transform handTransform = args.interactorObject.transform; // args.interactorObject est la main. On regarde son Transform.
+        // Identify who caught the bow (the "Interactor")
+        Transform handTransform = args.interactorObject.transform; // args.interactorObject is the hand. We look at his Transform.
         
-        // On vérifie le tag sur l'objet main OU sur son parent (le Controller)
+        // Check the tag on the main object OR on its parent (the Controller)
         bool isRightHand = handTransform.CompareTag(rightHandTag) || 
                 (handTransform.parent != null && handTransform.parent.CompareTag(rightHandTag));
-
 
         if (arrow != null)
         {
             Vector3 pos = arrow.localPosition;
 
-            // On définit le facteur : 1 pour Droitier, -1 pour Gaucher
+            // Define the factor: 1 for Right-handed, -1 for Left-handed
             float sideFactor = isRightHand ? 1f : -1f;
 
-            // On prend la valeur absolue et on applique le signe
+            // Take the absolute value and we apply the sign
             pos.x = Mathf.Abs(pos.x) * sideFactor;
-
             arrow.localPosition = pos;
-
-            // Debug.Log(isRightHand ? "Mode Gaucher : Flèche à Droite (+)" : "Mode Droitier : Flèche à Gauche (-)");
         }
     }
     

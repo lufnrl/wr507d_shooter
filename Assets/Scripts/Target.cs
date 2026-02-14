@@ -9,7 +9,6 @@ public class Target : MonoBehaviour, IHittable
     [SerializeField] private float timeBeforeDestroy = 0.15f;
 
     [Header("Effets")]
-    // On demande directement le fichier son, plus besoin du composant AudioSource !
     [SerializeField] private AudioClip destructionSound; 
     [SerializeField] [Range(0f, 1f)] private float soundVolume = 1.0f;
 

@@ -24,7 +24,7 @@ public class ScoreManager : MonoBehaviour
 
     private void Start()
     {
-        // On initialise l'affichage à 0 au lancement du jeu
+        // Set the display to 0 at the launch of the game
         UpdateScoreDisplay();
     }
 
@@ -33,13 +33,12 @@ public class ScoreManager : MonoBehaviour
         currentScore += pointsToAdd;
         Debug.Log($"CIBLE TOUCHÉE ! (+{pointsToAdd}) | Score Total : {currentScore}");
 
-        // On met à jour la pierre à chaque point gagné !
+        // Update the stone with each point earned
         UpdateScoreDisplay();
     }
 
     private void UpdateScoreDisplay()
     {
-        // On vérifie que la case n'est pas vide pour éviter les erreurs
         if (scoreText != null) 
         {
             scoreText.text = "SCORE : " + currentScore.ToString();

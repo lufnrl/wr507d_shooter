@@ -27,7 +27,7 @@ public class EndScreenManager : MonoBehaviour
         {
             restartButton.SetActive(false);
         }
-        // On désactive tout le Canvas au départ, c'est plus propre
+
         if (endScreenCanvas != null)
         {
             endScreenCanvas.gameObject.SetActive(false);
@@ -40,7 +40,7 @@ public class EndScreenManager : MonoBehaviour
 
         EnemySpawner spawner = FindObjectOfType<EnemySpawner>();
 
-        // 1. On mémorise si le Boss est entré dans la partie
+        // Memorize if the Boss has entered the game
         if (spawner != null)
         {
             if (spawner.IsBossActive() && spawner.DoesBossExist())
@@ -144,11 +144,7 @@ public class EndScreenManager : MonoBehaviour
                 endScreenCanvas.transform.localScale = new Vector3(0.003f, 0.003f, 0.003f);
                 // Debug.LogWarning("CAMÉRA TROUVEE !");
             }
-            // else
-            // {
-            //     Debug.LogWarning("CAMÉRA INTROUVABLE !");
-            // }
-            
+
             // Activate Canvas
             endScreenCanvas.gameObject.SetActive(true);
         }
@@ -194,7 +190,6 @@ public class EndScreenManager : MonoBehaviour
         foreach (MoutonMovement mouton in allSheeps)
         {
             // Desactivate sheep script
-            // mouton.enabled = false;
             mouton.FinishGame();
 
             // IF sheeps use a NavMeshAgent (intelligent movement) :

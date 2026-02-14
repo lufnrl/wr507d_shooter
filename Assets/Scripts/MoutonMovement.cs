@@ -132,7 +132,6 @@ public class MoutonMovement : MonoBehaviour
     {
         isGameFinished = true;
         
-        // On arrête l'animation proprement
         if (animator != null)
         {
             animator.speed = 0;
@@ -145,11 +144,9 @@ public class MoutonMovement : MonoBehaviour
             agent.enabled = false; 
         }
         
-        // On freine le Rigidbody pour qu'il ne glisse pas, mais on le laisse KINEMATIC à false
-        // pour qu'il ne passe pas au travers du sol !
         if (rb != null)
         {
-            if (rb.isKinematic == false) // <--- LA SÉCURITÉ EST ICI
+            if (rb.isKinematic == false)
             {
                 rb.velocity = Vector3.zero;
                 rb.angularVelocity = Vector3.zero;

@@ -10,7 +10,7 @@ public class RecenterOnStart : MonoBehaviour
     {
         xrOrigin = GetComponent<XROrigin>();
         
-        // On attend une toute petite seconde que le casque VR s'allume et s'initialise bien
+        // Wait a second for the VR headset to turn on and initialize properly
         StartCoroutine(RecenterRoutine());
     }
 
@@ -20,7 +20,7 @@ public class RecenterOnStart : MonoBehaviour
         
         if (xrOrigin != null)
         {
-            // Force la caméra (le joueur) à regarder dans la même direction que la flèche bleue (Z) de ton XR Origin
+            // Force the camera (the player) to look in the same direction as the blue arrow (Z) of your XR Origin
             xrOrigin.MatchOriginUpCameraForward(xrOrigin.transform.up, xrOrigin.transform.forward);
         }
     }
