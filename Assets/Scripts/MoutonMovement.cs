@@ -26,6 +26,8 @@ public class MoutonMovement : MonoBehaviour
     // Track if this mouton is being targeted by an alien
     public bool isTargeted { get; private set; }
 
+    public bool isGameFinished { get; private set; } = false;
+
     void Start()
     {
         startPosition = transform.position;
@@ -46,6 +48,8 @@ public class MoutonMovement : MonoBehaviour
 
     void Update()
     {
+        if (isGameFinished) return;
+
         // Don't move if being targeted/captured
         if (isTargeted)
         {
@@ -122,5 +126,36 @@ public class MoutonMovement : MonoBehaviour
     public void SetTargeted(bool targeted)
     {
         isTargeted = targeted;
+    }
+
+    public void FinishGame()
+    {
+        isGameFinished = true;
+        
+        // On arrête l'animation proprement
+        if (animator != null)
+        {
+            animator.speed = 0;
+            isWalking = false;
+        }
+
+        UnityEngine.AI.NavMeshAgent agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+        if (agent != null)
+        {
+            agent.enabled = false; 
+        }
+        
+        // On freine le Rigidbody pour qu'il ne glisse pas, mais on le laisse KINEMATIC à false
+        // pour qu'il ne passe pas au travers du sol !
+        if (rb != null)
+        {
+            if (rb.isKinematic == false) // <--- LA SÉCURITÉ EST ICI
+            {
+                rb.velocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+                rb.useGravity = false;
+                rb.isKinematic = true;
+            }
+        }
     }
 }

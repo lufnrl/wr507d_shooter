@@ -11,6 +11,7 @@ public class EndScreenManager : MonoBehaviour
     
     private bool gameOverShown = false;
     private bool gameWon = false;
+    private bool bossWasSpotted = false;
 
     void Start()
     {
@@ -36,13 +37,24 @@ public class EndScreenManager : MonoBehaviour
     void Update()
     {
         int sheepCount = FindObjectsOfType<MoutonMovement>().Length;
+
+        EnemySpawner spawner = FindObjectOfType<EnemySpawner>();
+
+        // 1. On mémorise si le Boss est entré dans la partie
+        if (spawner != null)
+        {
+            if (spawner.IsBossActive() && spawner.DoesBossExist())
+            {
+                bossWasSpotted = true;
+            }
+        }
         
         // Check win condition
         if (!gameWon && !gameOverShown && sheepCount > 0)
         {
-            EnemySpawner spawner = FindObjectOfType<EnemySpawner>();
             
-            if (spawner != null && spawner.IsSpawningStopped() && spawner.IsBossActive())
+            
+            if (spawner != null && bossWasSpotted)
             {
                 if (!spawner.DoesBossExist())
                 {
@@ -61,6 +73,12 @@ public class EndScreenManager : MonoBehaviour
     private void ShowWinScreen(int sheepCount)
     {
         gameWon = true;
+        
+        EnemySpawner spawner = FindObjectOfType<EnemySpawner>();
+        if (spawner != null)
+        {
+            spawner.StopBossEffects();
+        }
 
         int baseScore = 0;
         if (ScoreManager.Instance != null)
@@ -75,7 +93,7 @@ public class EndScreenManager : MonoBehaviour
         ShowEndScreen(
             $"<size=60>You Win !</size>\n" +
             $"<size=30>Score : {baseScore}\n" +
-            $"+{sheepCount} sheep saved ({sheepBonus} pts)</size>\n" +
+            $"+{sheepCount} sheep saved</size>\n" +
             $"<size=60>Total = {finalTotalScore}</size>", 
             new Color32(0x62, 0x2E, 0x03, 0xFF)
         );
@@ -164,27 +182,26 @@ public class EndScreenManager : MonoBehaviour
             spawner.enabled = false; 
         }
 
+        Target[] allUfo = FindObjectsOfType<Target>();
+        foreach (Target ufo in allUfo)
+        {
+            Destroy(ufo.gameObject);
+        }
+
         // Find all enemies and sheeps already in the scene
-        MoutonMovement[] tousLesMoutons = FindObjectsOfType<MoutonMovement>();
+        MoutonMovement[] allSheeps = FindObjectsOfType<MoutonMovement>();
         
-        foreach (MoutonMovement mouton in tousLesMoutons)
+        foreach (MoutonMovement mouton in allSheeps)
         {
             // Desactivate sheep script
-            mouton.enabled = false;
+            // mouton.enabled = false;
+            mouton.FinishGame();
 
             // IF sheeps use a NavMeshAgent (intelligent movement) :
             UnityEngine.AI.NavMeshAgent agent = mouton.GetComponent<UnityEngine.AI.NavMeshAgent>();
             if (agent != null)
             {
                 agent.isStopped = true;
-            }
-
-            // IF sheeps use physic (Rigidbody) :
-            Rigidbody rb = mouton.GetComponent<Rigidbody>();
-            if (rb != null)
-            {
-                rb.velocity = Vector3.zero; // On annule sa vitesse
-                rb.isKinematic = true;      // On le fige dans les airs
             }
 
             // Freeze animation (optional)
