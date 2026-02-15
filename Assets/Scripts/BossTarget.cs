@@ -70,6 +70,7 @@ public class BossTarget : MonoBehaviour, IHittable
             {
                 BreakShield();
             }
+            return;
         }
         // If the shield is broken
         else
@@ -83,7 +84,6 @@ public class BossTarget : MonoBehaviour, IHittable
             currentHealth--;
             UpdateHealthBar();
 
-            // Optional : add impact or harm sound here
             if (currentHealth <= 0)
             {
                 StartCoroutine(DeathSequence()); // Start the dead animation sequence
@@ -173,7 +173,7 @@ public class BossTarget : MonoBehaviour, IHittable
 
             rb.AddForce(crashDirection * 30f, ForceMode.VelocityChange);
 
-            float spinForce = 3f;
+            float spinForce = 4f;
             rb.AddTorque(new Vector3(Random.Range(-spinForce, spinForce), Random.Range(-spinForce, spinForce), Random.Range(-spinForce, spinForce)), ForceMode.VelocityChange);
         }
 

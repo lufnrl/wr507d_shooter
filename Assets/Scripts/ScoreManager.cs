@@ -31,7 +31,7 @@ public class ScoreManager : MonoBehaviour
     public void AddScore(int pointsToAdd)
     {
         currentScore += pointsToAdd;
-        Debug.Log($"CIBLE TOUCHÉE ! (+{pointsToAdd}) | Score Total : {currentScore}");
+        // Debug.Log($"CIBLE TOUCHÉE ! (+{pointsToAdd}) | Score Total : {currentScore}");
 
         // Update the stone with each point earned
         UpdateScoreDisplay();

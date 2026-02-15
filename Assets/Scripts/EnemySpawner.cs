@@ -425,6 +425,24 @@ public class EnemySpawner : MonoBehaviour
         {
             bossHover.enabled = false;
         }
+
+        // Disable the Hitbox (the arrow will pass through)
+        Collider col = finalBossInstance.GetComponent<Collider>();
+        if (col != null) col.enabled = false;
+
+        // Disable the visual (makes it invisible)
+        Renderer[] renderers = finalBossInstance.GetComponentsInChildren<Renderer>();
+        foreach (Renderer r in renderers)
+        {
+            r.enabled = false;
+        }
+        
+        // Disable particle effects (like the tractor beam)
+        ParticleSystem[] particles = finalBossInstance.GetComponentsInChildren<ParticleSystem>();
+        foreach (ParticleSystem p in particles)
+        {
+            p.Stop();
+        }
         
         // Debug.Log("Final boss found in scene and ready to activate");
     }
@@ -433,6 +451,16 @@ public class EnemySpawner : MonoBehaviour
     {
         if (finalBossInstance == null) yield break;
         
+        // Reactivate the Hitbox
+        Collider col = finalBossInstance.GetComponent<Collider>();
+        if (col != null) col.enabled = true;
+
+        // RReactivate the visual
+        Renderer[] renderers = finalBossInstance.GetComponentsInChildren<Renderer>();
+        foreach (Renderer r in renderers)
+        {
+            r.enabled = true;
+        }
         // Debug.Log("Final boss rising!");
         
         // Play boss music from the beginning
