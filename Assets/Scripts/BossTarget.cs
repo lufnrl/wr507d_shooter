@@ -31,10 +31,13 @@ public class BossTarget : MonoBehaviour, IHittable
     [Header("Death effects")]
     public GameObject explosionPrefab; // A particle effect
     public AudioClip explosionSound;   // The sound of an explosion
-    public float deathSequenceDuration = 2f; // The death animation lasts 2 seconds
-    public int numberOfExplosions = 6; // Number ofexplosions
+    public float deathSequenceDuration = 6f; // The death animation lasts 2 seconds
+    public int numberOfExplosions = 6; // Number of explosions
+    public GameObject finalSmokePrefab;
 
-    private bool isDead = false;
+    public bool isDead = false;
+    public bool isCrashFinished = false;
+
 
     void Start()
     {
@@ -60,12 +63,8 @@ public class BossTarget : MonoBehaviour, IHittable
         if (isShieldActive)
         {
             currentShieldHealth--;
-
             PlaySoundInEars(shieldHitSound);
-            
-            // Plau sound
-            // if (shieldHitSound != null) AudioSource.PlayClipAtPoint(shieldHitSound, transform.position);
-
+    
             // If the shield is broken
             if (currentShieldHealth <= 0)
             {
@@ -95,16 +94,10 @@ public class BossTarget : MonoBehaviour, IHittable
     private void BreakShield()
     {
         isShieldActive = false;
-        
-        // Hide the shield visual
-        if (shieldVisual != null) shieldVisual.SetActive(false);
-        
-        // Play the sound of breaking the shield
-        PlaySoundInEars(shieldBreakSound);
-        // if (shieldBreakSound != null) AudioSource.PlayClipAtPoint(shieldBreakSound, transform.position);
-        
-        // Start the stopwatch to regenerate it
-        StartCoroutine(ShieldRegenTimer());
+
+        if (shieldVisual != null) shieldVisual.SetActive(false); // Hide the shield visual
+        PlaySoundInEars(shieldBreakSound); // Play the sound of breaking the shield
+        StartCoroutine(ShieldRegenTimer()); // Start the stopwatch to regenerate it
     }
 
     private IEnumerator ShieldRegenTimer()
@@ -121,7 +114,6 @@ public class BossTarget : MonoBehaviour, IHittable
         
         if (shieldVisual != null) shieldVisual.SetActive(true);
         PlaySoundInEars(shieldRegenSound);
-        // if (shieldRegenSound != null) AudioSource.PlayClipAtPoint(shieldRegenSound, transform.position);
     }
 
     private void UpdateHealthBar()
@@ -137,57 +129,111 @@ public class BossTarget : MonoBehaviour, IHittable
     {
         isDead = true;
 
-        // Hide health bar
+        // Hide health bar and interface
         if (healthBarCanvas != null) healthBarCanvas.SetActive(false);
+        if (shieldVisual != null) shieldVisual.SetActive(false);
 
-        // Desactivate collider for news arrows to pass through
-        Collider col = GetComponent<Collider>();
-        if (col != null) col.enabled = false;
+        // Cut all sounds
+        AudioSource[] allAudios = FindObjectsOfType<AudioSource>();
+        foreach (AudioSource audio in allAudios) audio.Stop();
 
-        // (If the boss was moving, this is where you have to disable his movement script so that it stops in the air.)
-        // ex: GetComponent<BossMovement>().enabled = false;
+        // Turn on the sun light et dissipate the dark sky
+        Light[] allLights = FindObjectsOfType<Light>();
+        foreach (Light l in allLights)
+        {
+            if (l.type == LightType.Directional) l.intensity = 1f; // Sun at the max
+        }
+        RenderSettings.ambientIntensity = 1.5f;
+        if (RenderSettings.skybox != null) RenderSettings.skybox.SetFloat("_Exposure", 1.1f);
+
+        // Force EnemySpawner to stop boss movement
+        EnemySpawner spawner = FindObjectOfType<EnemySpawner>();
+        if (spawner != null) spawner.StopAllCoroutines();  // Stop abduction and rotation
+
+        // Activate gravity to make the boss crash
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.isKinematic = false;
+            rb.useGravity = true;
+            rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+
+            rb.velocity = Vector3.zero;
+
+            rb.drag = 0.1f; 
+            rb.angularDrag = 2f;
+
+            // Calculate the direction "away from the player" (towards the bottom of the map)
+            Vector3 crashDirection = transform.forward;
+            if (Camera.main != null)
+            {
+                crashDirection = (transform.position - Camera.main.transform.position).normalized;
+            }
+            crashDirection.y = -1f;
+
+            rb.AddForce(crashDirection * 30f, ForceMode.VelocityChange);
+
+            float spinForce = 3f;
+            rb.AddTorque(new Vector3(Random.Range(-spinForce, spinForce), Random.Range(-spinForce, spinForce), Random.Range(-spinForce, spinForce)), ForceMode.VelocityChange);
+        }
+
+
+        // Smoke start at the beginning of the crash
+        if (finalSmokePrefab != null)
+        {
+            Instantiate(finalSmokePrefab, transform.position, Quaternion.identity, transform);
+        }
 
         // Explosion loop
         float delayBetweenExplosions = deathSequenceDuration / numberOfExplosions;
 
         for (int i = 0; i < numberOfExplosions; i++)
         {
-            // Calculate a random position around the boss center
-            Vector3 randomOffset = Random.insideUnitSphere * 3f;
+            // Calculate a random position around the boss center (in meters)
+            Vector3 randomOffset = Random.onUnitSphere * 40f;
             Vector3 explosionPos = transform.position + randomOffset;
 
             // Makes the explosion particles appear
             if (explosionPrefab != null)
             {
-                Instantiate(explosionPrefab, explosionPos, Quaternion.identity);
+                GameObject exp = Instantiate(explosionPrefab, explosionPos, Quaternion.identity);
+                exp.transform.localScale = new Vector3(15f, 15f, 15f); // Magnify the explosion x4 to see it well
             }
 
-            // Play explosion sound
-            // if (explosionSound != null)
-            // {
-            //     AudioSource.PlayClipAtPoint(explosionSound, explosionPos);
-            // }
-            PlaySoundInEars(explosionSound);
-
-            // Takes a break before the next explosion
-            yield return new WaitForSeconds(delayBetweenExplosions);
+            PlaySoundInEars(explosionSound, 0.3f);
+            yield return new WaitForSeconds(delayBetweenExplosions); // Take a break before the next explosion
         }
 
-        // Give points
-        if (ScoreManager.Instance != null)
+        // Final scene : A giant explosion just before disappearing
+        if (explosionPrefab != null)
         {
-            ScoreManager.Instance.AddScore(bossPointsValue);
+            GameObject finalExp = Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+            finalExp.transform.localScale = new Vector3(60f, 60f, 60f); // Big BOOM
         }
 
-        // Destroy boss -> Win screen
-        Destroy(gameObject);
+        // One last sound to complete the sequence
+        PlaySoundInEars(explosionSound, 1f);
+        if (ScoreManager.Instance != null) ScoreManager.Instance.AddScore(bossPointsValue); // Give points
+
+        // Make the carcass black/burned
+        Renderer[] renderers = GetComponentsInChildren<Renderer>();
+        foreach(Renderer r in renderers)
+        {
+            if (r.material.HasProperty("_Color"))
+            {
+                r.material.color = new Color(0.3f, 0.3f, 0.3f); // Very dark grey (burnt)
+            }
+        }
+
+        // The crash is 100% over, we authorize the victory screen
+        isCrashFinished = true;
     }
 
-    private void PlaySoundInEars(AudioClip clip)
+    private void PlaySoundInEars(AudioClip clip, float volumeMultiplier = 1f)
     {
         if (clip != null && Camera.main != null)
         {
-            AudioSource.PlayClipAtPoint(clip, Camera.main.transform.position, soundVolume);
+            AudioSource.PlayClipAtPoint(clip, Camera.main.transform.position, soundVolume * volumeMultiplier);
         }
     }
 }

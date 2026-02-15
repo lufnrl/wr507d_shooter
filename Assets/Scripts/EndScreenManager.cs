@@ -37,26 +37,22 @@ public class EndScreenManager : MonoBehaviour
     void Update()
     {
         int sheepCount = FindObjectsOfType<MoutonMovement>().Length;
-
         EnemySpawner spawner = FindObjectOfType<EnemySpawner>();
+        BossTarget boss = FindObjectOfType<BossTarget>();
 
         // Memorize if the Boss has entered the game
-        if (spawner != null)
+        if (spawner != null && spawner.DoesBossExist())
         {
-            if (spawner.IsBossActive() && spawner.DoesBossExist())
-            {
-                bossWasSpotted = true;
-            }
+            bossWasSpotted = true;
         }
         
         // Check win condition
         if (!gameWon && !gameOverShown && sheepCount > 0)
         {
             
-            
-            if (spawner != null && bossWasSpotted)
+            if (bossWasSpotted)
             {
-                if (!spawner.DoesBossExist())
+                if (boss == null || boss.isCrashFinished)
                 {
                     ShowWinScreen(sheepCount);
                 }

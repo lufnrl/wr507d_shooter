@@ -636,7 +636,14 @@ public class EnemySpawner : MonoBehaviour
     
     public bool DoesBossExist()
     {
-        return finalBossInstance != null;
+        if (finalBossInstance == null) return false;
+
+        // Si le boss est physiquement là, mais que son script dit qu'il est mort, 
+        // on renvoie "false" pour déclencher l'écran de victoire !
+        BossTarget bossTarget = finalBossInstance.GetComponent<BossTarget>();
+        if (bossTarget != null && bossTarget.isCrashFinished) return false;
+        
+        return true;
     }
     
     private IEnumerator ShakeCamera(float duration)
