@@ -1885,7 +1885,7 @@ MonoBehaviour:
   bossRiseHeight: 150
   bossDistanceFromPlayer: 40
   bossAbductionDelay: 2
-  bossAbductionDuration: 5
+  bossAbductionDuration: 20
   sheepRiseSpeed: 2
   cameraShakeIntensity: 0.1
   cameraShakeDuration: 10
