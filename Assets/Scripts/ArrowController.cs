@@ -29,7 +29,7 @@ public class ArrowController : MonoBehaviour
     private void Start()
     {
         // Fill the quiver at the start
-        currentArrowCount = maxArrows;
+        currentArrowCount = 0;
         UpdateArrowsNumberDisplay(); // To display the initial arrow count
     }
 
