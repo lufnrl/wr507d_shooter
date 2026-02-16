@@ -27,6 +27,8 @@ public class MoutonMovement : MonoBehaviour
     public bool isTargeted { get; private set; }
 
     public bool isGameFinished { get; private set; } = false;
+    
+    private bool isFalling = false;
 
     void Start()
     {
@@ -126,6 +128,45 @@ public class MoutonMovement : MonoBehaviour
     public void SetTargeted(bool targeted)
     {
         isTargeted = targeted;
+        
+        // If sheep is being released while in the air, mark it as falling
+        if (!targeted && rb != null && !rb.isKinematic)
+        {
+            // Check if Y position is not frozen (means it's falling)
+            if ((rb.constraints & RigidbodyConstraints.FreezePositionY) == 0)
+            {
+                isFalling = true;
+            }
+        }
+    }
+    
+    void OnCollisionEnter(Collision collision)
+    {
+        // If falling and hit the ground, restore normal movement constraints
+        if (isFalling && rb != null)
+        {
+            // Check if we hit something below us (ground)
+            foreach (ContactPoint contact in collision.contacts)
+            {
+                // If the contact normal points upward (we hit something from above)
+                if (contact.normal.y > 0.5f)
+                {
+                    // Restore normal constraints - freeze Y position so sheep walks on ground level
+                    rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionY;
+                    rb.velocity = Vector3.zero;
+                    rb.angularVelocity = Vector3.zero;
+                    isFalling = false;
+                    
+                    // Resume walking animation
+                    if (animator != null)
+                    {
+                        animator.speed = 1;
+                    }
+                    
+                    break;
+                }
+            }
+        }
     }
 
     public void FinishGame()

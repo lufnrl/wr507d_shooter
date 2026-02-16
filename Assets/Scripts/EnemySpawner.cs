@@ -1225,6 +1225,29 @@ public class FlyingSaucerHover : MonoBehaviour
                 moutonScript.SetTargeted(false);
             }
         }
+        
+        // Release captured sheep when UFO is destroyed
+        if (capturedMouton != null)
+        {
+            MoutonMovement moutonScript = capturedMouton.GetComponent<MoutonMovement>();
+            if (moutonScript != null)
+            {
+                moutonScript.SetTargeted(false);
+            }
+            
+            // Re-enable physics so the sheep falls
+            Rigidbody rb = capturedMouton.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.isKinematic = false;
+                rb.useGravity = true;
+                // Remove Y position freeze so sheep can fall
+                rb.constraints = RigidbodyConstraints.FreezeRotation;
+                
+                // Add a slight downward velocity for more natural falling
+                rb.velocity = Vector3.down * 2f;
+            }
+        }
     }
 
     IEnumerator PopInAnimation()
