@@ -13,6 +13,9 @@ public class EquipQuiver : MonoBehaviour
     [Header("Liaison avec l'Arme")]
     [SerializeField] private ArrowController bowArrowController;
 
+    [Header("Liaison avec le Spawner")]
+    [SerializeField] private EnemySpawner enemySpawner;
+
     [Header("Feedback (UI et Son)")]
     [SerializeField] private GameObject feedbackCanvas; 
     
@@ -81,6 +84,12 @@ public class EquipQuiver : MonoBehaviour
         if (bowArrowController != null)
         {
             bowArrowController.Reload();
+        }
+
+        // Warn the Spawner
+        if (enemySpawner != null)
+        {
+            enemySpawner.PlayerEquippedQuiver();
         }
 
         // Disable interaction

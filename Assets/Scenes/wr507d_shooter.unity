@@ -404,7 +404,7 @@ PrefabInstance:
     - target: {fileID: 6598815579406187037, guid: 18ddb545287c546e19cc77dc9fbb2189,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3395,7 +3395,6 @@ GameObject:
   - component: {fileID: 417137045}
   - component: {fileID: 417137044}
   - component: {fileID: 417137043}
-  - component: {fileID: 417137047}
   m_Layer: 5
   m_Name: QuiverEquipedCanvas
   m_TagString: Untagged
@@ -3487,18 +3486,6 @@ RectTransform:
   m_AnchoredPosition: {x: 1.443, y: 0.999}
   m_SizeDelta: {x: 1.6, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &417137047
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 417137042}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eba144c2e2449de4dbff35d3a29e462d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &425283659 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1025681519537117646, guid: aa99a810914c5b84b9bc5d51f95dd05c,
@@ -11078,6 +11065,7 @@ MonoBehaviour:
   quiverZone: {fileID: 20955424}
   outlineScript: {fileID: 1810697508}
   bowArrowController: {fileID: 1879764926}
+  enemySpawner: {fileID: 255478384}
   feedbackCanvas: {fileID: 417137042}
   feedbackMessage: {fileID: 1552746412}
   audioSource: {fileID: 20955425}
@@ -11327,6 +11315,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grabInteractable: {fileID: 1879764929}
   outlineScript: {fileID: 1879764932}
+  enemySpawner: {fileID: 255478384}
 --- !u!1 &1883799448 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1025681519537117646, guid: aa99a810914c5b84b9bc5d51f95dd05c,

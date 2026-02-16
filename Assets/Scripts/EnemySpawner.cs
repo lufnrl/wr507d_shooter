@@ -151,6 +151,10 @@ public class EnemySpawner : MonoBehaviour
     private int totalAliensSpawned = 0;
     private bool allWavesCompleted = false;
 
+    private bool isBowGrabbed = false;
+    private bool isQuiverEquipped = false;
+    private bool hasGameStarted = false;
+
     void Start()
     {
         playerCamera = Camera.main.transform;
@@ -249,7 +253,33 @@ public class EnemySpawner : MonoBehaviour
         // Spawn and hide the final boss
         SpawnFinalBoss();
         
-        StartCoroutine(SpawnWaveRoutine());
+        // StartCoroutine(SpawnWaveRoutine());
+    }
+
+    // Called by the bow when he is caught
+    public void PlayerGrabbedBow()
+    {
+        isBowGrabbed = true;
+        TryStartInvasion();
+    }
+
+    // Called by the quiver when it is equipped
+    public void PlayerEquippedQuiver()
+    {
+        isQuiverEquipped = true;
+        TryStartInvasion();
+    }
+
+    // Check if we have the two green lights
+    private void TryStartInvasion()
+    {
+        if (isBowGrabbed && isQuiverEquipped && !hasGameStarted)
+        {
+            hasGameStarted = true;
+            Debug.Log("Le joueur est armé ! Que l'invasion commence !");
+            
+            StartCoroutine(SpawnWaveRoutine());
+        }
     }
 
     void Update()

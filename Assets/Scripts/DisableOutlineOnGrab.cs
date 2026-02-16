@@ -4,11 +4,11 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class DisableOutlineOnGrab : MonoBehaviour
 {
     [Header("Composants")]
-    [Tooltip("L'Interactable de l'arc (généralement sur le même objet)")]
     [SerializeField] private XRGrabInteractable grabInteractable;
     
-    [Tooltip("Le script Outline à désactiver")]
     [SerializeField] private MonoBehaviour outlineScript; 
+
+    [SerializeField] private EnemySpawner enemySpawner;
 
     void Start()
     {
@@ -32,7 +32,13 @@ public class DisableOutlineOnGrab : MonoBehaviour
             outlineScript.enabled = false;
         }
 
-        // Uunsubscribe from the event so that this code runs only once
+        // Inform the Spawner that the arc is taken
+        if (enemySpawner != null)
+        {
+            enemySpawner.PlayerGrabbedBow();
+        }
+
+        // Unsubscribe from the event so that this code runs only once
         if (grabInteractable != null)
         {
             grabInteractable.selectEntered.RemoveListener(OnFirstGrab);
