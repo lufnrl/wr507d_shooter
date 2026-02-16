@@ -118,7 +118,7 @@ public class ArrowController : MonoBehaviour
 
         Transform head = Camera.main.transform; // Assuming the main camera is the player's head
 
-        tutorialCanvas.transform.position = head.position + (head.forward * 1.5f); // Position = head + 1.5 meter forward
+        tutorialCanvas.transform.position = head.position + (head.forward * 2f); // Position = head +s meter forward
         tutorialCanvas.transform.LookAt(head); // Canvas look at the player
         tutorialCanvas.transform.Rotate(0, 180, 0); // Rotate around y axis to face the player correctly
     }
