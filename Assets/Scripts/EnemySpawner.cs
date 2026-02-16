@@ -82,7 +82,7 @@ public class EnemySpawner : MonoBehaviour
     
     [Header("Spawn Position")]
     [SerializeField]
-    private float spawnDistance = 15f;
+    private float spawnDistance = 8f; // Reduced from 15f to spawn closer to player
 
     [SerializeField]
     private float spawnHeightMin = 10f;
@@ -349,14 +349,14 @@ public class EnemySpawner : MonoBehaviour
         int randomOvniIndex = Random.Range(0, ovniPrefabs.Length);
         GameObject selectedOvniPrefab = ovniPrefabs[randomOvniIndex];
 
-        // Calculate spawn position in front of the player (within a 180-degree arc)
+        // Calculate spawn position in front of the player (within a narrower arc)
         // Get the player's forward direction on the horizontal plane
         Vector3 cameraForward = playerCamera.forward;
         cameraForward.y = 0f; // Flatten to horizontal plane
         cameraForward.Normalize();
         
-        // Random angle offset from -90 to +90 degrees (front hemisphere)
-        float angleOffset = Random.Range(-90f, 90f);
+        // Random angle offset from -60 to +60 degrees (narrower front arc to avoid trees)
+        float angleOffset = Random.Range(-60f, 60f);
         
         // Rotate the forward direction by the offset
         float angleInRadians = angleOffset * Mathf.Deg2Rad;
