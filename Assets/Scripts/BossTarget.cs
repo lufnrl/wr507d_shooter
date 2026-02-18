@@ -14,6 +14,13 @@ public class BossTarget : MonoBehaviour, IHittable
     private int currentShieldHealth;
     public float vulnerableDuration = 8f; // Time in seconds before the shield returns
     public GameObject shieldVisual;
+
+    [Header("Feedback Visuel Bouclier")] // --- NOUVEAU ---
+    public Color damageFlashColor = Color.white; // Rougeâtre par défaut
+    public float flashDuration = 0.1f; // Durée du flash
+    private Renderer shieldRenderer; // Pour changer la couleur
+    public Color healthyColor = new Color(0f, 1f, 0f, 0.8f); // Vert (Pleinne vie)
+    public Color brokenColor = new Color(1f, 0f, 0f, 0.8f);  // Rouge (Presque mort)
     
     [Header("Paramètres Audio")]
     [Range(0f, 1f)] 
@@ -51,7 +58,20 @@ public class BossTarget : MonoBehaviour, IHittable
         }
 
         // Make sure that the shield visual is well lit at the start
-        if (shieldVisual != null) shieldVisual.SetActive(true);
+        if (shieldVisual != null) 
+        {
+            shieldVisual.SetActive(true);
+            shieldRenderer = shieldVisual.GetComponent<Renderer>();
+            
+            // On sauvegarde la couleur initiale pour pouvoir y revenir après un flash
+            if (shieldRenderer != null)
+            {
+                shieldRenderer.material.color = healthyColor;
+            }
+        }
+
+        
+        // if (shieldVisual != null) shieldVisual.SetActive(true);
     }
 
     public void GetHit()
@@ -64,6 +84,11 @@ public class BossTarget : MonoBehaviour, IHittable
         {
             currentShieldHealth--;
             PlaySoundInEars(shieldHitSound);
+
+            if (shieldRenderer != null)
+            {
+                StartCoroutine(FlashShield());
+            }
     
             // If the shield is broken
             if (currentShieldHealth <= 0)
@@ -91,6 +116,33 @@ public class BossTarget : MonoBehaviour, IHittable
         }
     }
 
+    private IEnumerator FlashShield()
+    {
+        // 1. FLASH D'IMPACT (Blanc/Rouge vif)
+        shieldRenderer.material.color = damageFlashColor;
+
+        // Attente du flash
+        yield return new WaitForSeconds(flashDuration);
+
+        // 2. CALCUL SÉCURISÉ
+        // On s'assure que le résultat est entre 0.0 et 1.0
+        float healthPercentage = (float)currentShieldHealth / (float)shieldMaxHealth;
+        
+        // Petite sécurité : Si on est à 0 PV (le coup fatal), on force 0
+        if (currentShieldHealth <= 0) healthPercentage = 0f;
+
+        // 3. APPLICATION DE LA COULEUR
+        // Lerp(Rouge, Vert, Pourcentage)
+        // 1.0 = Vert (Healthy)
+        // 0.0 = Rouge (Broken)
+        Color targetColor = Color.Lerp(brokenColor, healthyColor, healthPercentage);
+
+        // On force l'alpha à rester visible (au cas où tes couleurs ont de la transparence)
+        targetColor.a = 0.8f; // Ou healthyColor.a
+
+        shieldRenderer.material.color = targetColor;
+    }
+
     private void BreakShield()
     {
         isShieldActive = false;
@@ -112,7 +164,16 @@ public class BossTarget : MonoBehaviour, IHittable
         isShieldActive = true;
         currentShieldHealth = shieldMaxHealth; // Put back his health points
         
-        if (shieldVisual != null) shieldVisual.SetActive(true);
+        if (shieldVisual != null) 
+        {
+            shieldVisual.SetActive(true);
+            if (shieldRenderer != null)
+            {
+                // RESET : Le bouclier revient tout neuf (Vert)
+                shieldRenderer.material.color = healthyColor;
+            }
+        }
+        // if (shieldVisual != null) shieldVisual.SetActive(true);
         PlaySoundInEars(shieldRegenSound);
     }
 

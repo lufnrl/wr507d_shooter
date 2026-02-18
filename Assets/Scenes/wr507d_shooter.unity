@@ -2149,7 +2149,7 @@ MonoBehaviour:
   cameraShakeDuration: 8
   lightDimAmount: 0.3
   maxTotalAliens: 1
-  initialWaveDelay: 5
+  initialWaveDelay: 2
   timeBetweenWaves: 3
   minTimeBetweenWaves: 3
   delayReductionRate: 0.5
@@ -10652,7 +10652,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1760119709}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10.25}
+  m_LocalPosition: {x: 0, y: 0, z: -5.93}
   m_LocalScale: {x: 0.02, y: 0.02, z: 0.02}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -10662,7 +10662,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0.57, y: 3.07}
+  m_AnchoredPosition: {x: 0.57, y: 3.36}
   m_SizeDelta: {x: 371.5, y: 196.83333}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &1771597934
@@ -12146,7 +12146,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 500, y: 225}
+  m_SizeDelta: {x: 350, y: 180}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2031780105
 MonoBehaviour:
@@ -12195,8 +12195,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 100
-  m_fontSizeBase: 100
+  m_fontSize: 130
+  m_fontSizeBase: 130
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -13018,6 +13018,21 @@ PrefabInstance:
       objectReference: {fileID: 508163089}
     - target: {fileID: 2976246359086311358, guid: aab6a8a8805852f469c32ae245064e38,
         type: 3}
+      propertyPath: brokenColor.a
+      value: 0.49803922
+      objectReference: {fileID: 0}
+    - target: {fileID: 2976246359086311358, guid: aab6a8a8805852f469c32ae245064e38,
+        type: 3}
+      propertyPath: brokenColor.b
+      value: 0.084041595
+      objectReference: {fileID: 0}
+    - target: {fileID: 2976246359086311358, guid: aab6a8a8805852f469c32ae245064e38,
+        type: 3}
+      propertyPath: brokenColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2976246359086311358, guid: aab6a8a8805852f469c32ae245064e38,
+        type: 3}
       propertyPath: healthBarFill
       value: 
       objectReference: {fileID: 413589720}
@@ -13026,6 +13041,21 @@ PrefabInstance:
       propertyPath: explosionSound
       value: 
       objectReference: {fileID: 8300000, guid: e16981940bbbbcc49817dea905a1aaef, type: 3}
+    - target: {fileID: 2976246359086311358, guid: aab6a8a8805852f469c32ae245064e38,
+        type: 3}
+      propertyPath: healthyColor.a
+      value: 0.5019608
+      objectReference: {fileID: 0}
+    - target: {fileID: 2976246359086311358, guid: aab6a8a8805852f469c32ae245064e38,
+        type: 3}
+      propertyPath: healthyColor.b
+      value: 0.96059203
+      objectReference: {fileID: 0}
+    - target: {fileID: 2976246359086311358, guid: aab6a8a8805852f469c32ae245064e38,
+        type: 3}
+      propertyPath: healthyColor.r
+      value: 0.5921569
+      objectReference: {fileID: 0}
     - target: {fileID: 2976246359086311358, guid: aab6a8a8805852f469c32ae245064e38,
         type: 3}
       propertyPath: shieldHitSound
@@ -13058,6 +13088,26 @@ PrefabInstance:
       propertyPath: shieldRegenSound
       value: 
       objectReference: {fileID: 8300000, guid: 89d6fbe6f59ad3e4aa29fdaedd4bff1f, type: 3}
+    - target: {fileID: 2976246359086311358, guid: aab6a8a8805852f469c32ae245064e38,
+        type: 3}
+      propertyPath: damageFlashColor.a
+      value: 0.627451
+      objectReference: {fileID: 0}
+    - target: {fileID: 2976246359086311358, guid: aab6a8a8805852f469c32ae245064e38,
+        type: 3}
+      propertyPath: damageFlashColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2976246359086311358, guid: aab6a8a8805852f469c32ae245064e38,
+        type: 3}
+      propertyPath: damageFlashColor.g
+      value: 0.9822897
+      objectReference: {fileID: 0}
+    - target: {fileID: 2976246359086311358, guid: aab6a8a8805852f469c32ae245064e38,
+        type: 3}
+      propertyPath: damageFlashColor.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2976246359086311358, guid: aab6a8a8805852f469c32ae245064e38,
         type: 3}
       propertyPath: numberOfExplosions
@@ -13096,7 +13146,7 @@ PrefabInstance:
     - target: {fileID: 7123844043804875066, guid: aab6a8a8805852f469c32ae245064e38,
         type: 3}
       propertyPath: m_VersionIndex
-      value: 4607
+      value: 4619
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
