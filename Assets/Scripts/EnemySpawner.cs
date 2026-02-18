@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -155,6 +156,11 @@ public class EnemySpawner : MonoBehaviour
     private bool isQuiverEquipped = false;
     private bool hasGameStarted = false;
 
+    [Header("Countdown")]
+    [SerializeField] private TMP_Text countdownText;
+    [SerializeField] private AudioClip beepSound;
+    [SerializeField] private AudioClip goSound;
+
     void Start()
     {
         playerCamera = Camera.main.transform;
@@ -276,10 +282,53 @@ public class EnemySpawner : MonoBehaviour
         if (isBowGrabbed && isQuiverEquipped && !hasGameStarted)
         {
             hasGameStarted = true;
-            Debug.Log("Le joueur est armé ! Que l'invasion commence !");
             
-            StartCoroutine(SpawnWaveRoutine());
+            StartCoroutine(StartGameCountdown());
         }
+    }
+
+    private IEnumerator StartGameCountdown()
+    {
+        if (countdownText != null)
+        {
+            // Make sure that the text (or its parent Canvas) is lit
+            countdownText.gameObject.SetActive(true);
+            
+            // Loop for 3, 2, 1
+            for (int i = 3; i > 0; i--)
+            {
+                countdownText.text = i.ToString();
+                
+                // Play sound
+                if (beepSound != null && playerCamera != null)
+                {
+                    AudioSource.PlayClipAtPoint(beepSound, playerCamera.position, 1f);
+                }
+                
+                // Wait one second
+                yield return new WaitForSeconds(1f);
+            }
+            
+            // Display "GO !"
+            countdownText.text = "GO !";
+            if (goSound != null && playerCamera != null)
+            {
+                AudioSource.PlayClipAtPoint(goSound, playerCamera.position, 1f);
+            }
+            
+            // Leave the "GO !" visible for 1 second
+            yield return new WaitForSeconds(1f);
+            
+            // Hide text
+            countdownText.gameObject.SetActive(false);
+        }
+        else
+        {
+            // Security: if we haven’t put any text, we just wait 3 seconds in silence
+            yield return new WaitForSeconds(3f);
+        }
+
+        StartCoroutine(SpawnWaveRoutine());
     }
 
     void Update()
