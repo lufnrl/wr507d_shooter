@@ -1410,8 +1410,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4285685331
-  m_fontColor: {r: 0.3254902, g: 0.36862746, b: 0.44705883, a: 1}
+    rgba: 4280821800
+  m_fontColor: {r: 0.15686275, g: 0.15686275, b: 0.15686275, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -2009,10 +2009,12 @@ MonoBehaviour:
   bossRiseHeight: 150
   bossDistanceFromPlayer: 40
   bossAbductionDelay: 2
-  bossAbductionDuration: 5
+  bossAbductionDuration: 10
   sheepRiseSpeed: 2
   cameraShakeIntensity: 0.1
   cameraShakeDuration: 8
+  bowObject: {fileID: 1435334693228093941, guid: cc9bb0a65099d5546a9ca709b8129d8d,
+    type: 3}
   lightDimAmount: 0.3
   maxTotalAliens: 1
   initialWaveDelay: 5
@@ -8956,7 +8958,7 @@ PrefabInstance:
     - target: {fileID: 8255306072718237694, guid: 86d6ad37c1685794dbedff3e484f6ba7,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.028
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8255306072718237694, guid: 86d6ad37c1685794dbedff3e484f6ba7,
         type: 3}
@@ -9669,7 +9671,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 833f5267d05f84c2ba10fa1a9fcee0ba, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.8
+  m_Volume: 0.9
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -10385,8 +10387,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4285685331
-  m_fontColor: {r: 0.3254902, g: 0.36862746, b: 0.44705883, a: 1}
+    rgba: 4280953386
+  m_fontColor: {r: 0.16470589, g: 0.16470589, b: 0.16470589, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -12630,7 +12632,7 @@ PrefabInstance:
     - target: {fileID: 2976246359086311358, guid: aab6a8a8805852f469c32ae245064e38,
         type: 3}
       propertyPath: soundVolume
-      value: 0.4
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2976246359086311358, guid: aab6a8a8805852f469c32ae245064e38,
         type: 3}
