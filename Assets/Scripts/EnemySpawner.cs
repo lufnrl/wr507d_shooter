@@ -39,6 +39,9 @@ public class EnemySpawner : MonoBehaviour
     private float cameraShakeDuration = 3f; // How long the shake lasts
     
     [SerializeField]
+    private GameObject bowObject; // Reference to the bow to keep it stable during shake
+    
+    [SerializeField]
     private float lightDimAmount = 0.3f; // Target light intensity when dimmed (0 = dark, 1 = bright)
     
     private GameObject finalBossInstance;
@@ -82,7 +85,7 @@ public class EnemySpawner : MonoBehaviour
     
     [Header("Spawn Position")]
     [SerializeField]
-    private float spawnDistance = 15f;
+    private float spawnDistance = 8f; // Reduced from 15f to spawn closer to player
 
     [SerializeField]
     private float spawnHeightMin = 10f;
@@ -379,14 +382,14 @@ public class EnemySpawner : MonoBehaviour
         int randomOvniIndex = Random.Range(0, ovniPrefabs.Length);
         GameObject selectedOvniPrefab = ovniPrefabs[randomOvniIndex];
 
-        // Calculate spawn position in front of the player (within a 180-degree arc)
+        // Calculate spawn position in front of the player (within a narrower arc)
         // Get the player's forward direction on the horizontal plane
         Vector3 cameraForward = playerCamera.forward;
         cameraForward.y = 0f; // Flatten to horizontal plane
         cameraForward.Normalize();
         
-        // Random angle offset from -90 to +90 degrees (front hemisphere)
-        float angleOffset = Random.Range(-90f, 90f);
+        // Random angle offset from -60 to +60 degrees (narrower front arc to avoid trees)
+        float angleOffset = Random.Range(-60f, 60f);
         
         // Rotate the forward direction by the offset
         float angleInRadians = angleOffset * Mathf.Deg2Rad;
@@ -722,6 +725,16 @@ public class EnemySpawner : MonoBehaviour
         }
         
         Vector3 originalPosition = rigTransform.localPosition;
+        Vector3 originalBowPosition = Vector3.zero;
+        bool hasBow = false;
+        
+        // Store bow's original position if available
+        if (bowObject != null)
+        {
+            originalBowPosition = bowObject.transform.localPosition;
+            hasBow = true;
+        }
+        
         float elapsed = 0f;
         
         while (elapsed < duration)
@@ -731,13 +744,26 @@ public class EnemySpawner : MonoBehaviour
             float y = Random.Range(-1f, 1f) * cameraShakeIntensity;
             float z = Random.Range(-1f, 1f) * cameraShakeIntensity;
             
-            rigTransform.localPosition = originalPosition + new Vector3(x, y, z);
+            Vector3 shakeOffset = new Vector3(x, y, z);
+            rigTransform.localPosition = originalPosition + shakeOffset;
+            
+            // Counter-shake the bow to keep it stable
+            if (hasBow)
+            {
+                bowObject.transform.localPosition = originalBowPosition - shakeOffset;
+            }
             
             elapsed += Time.deltaTime;
             yield return null;
         }
         
         rigTransform.localPosition = originalPosition;
+        
+        // Restore bow position
+        if (hasBow)
+        {
+            bowObject.transform.localPosition = originalBowPosition;
+        }
     }
     
     private IEnumerator DimLight(float duration)
@@ -1223,6 +1249,33 @@ public class FlyingSaucerHover : MonoBehaviour
             if (moutonScript != null)
             {
                 moutonScript.SetTargeted(false);
+            }
+        }
+        
+        // Release captured sheep when UFO is destroyed
+        if (capturedMouton != null)
+        {
+            // Unparent the sheep in case it was parented to the UFO
+            capturedMouton.transform.SetParent(null);
+            
+            // Prepare for manual falling (no physics)
+            Rigidbody rb = capturedMouton.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                // Keep kinematic off, but we'll use manual movement for falling
+                rb.isKinematic = false;
+                rb.useGravity = false; // Disable gravity, we'll move manually
+                rb.constraints = RigidbodyConstraints.FreezeRotation; // Allow Y movement
+                rb.velocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+            }
+            
+            // Release the sheep and tell it to fall manually
+            MoutonMovement moutonScript = capturedMouton.GetComponent<MoutonMovement>();
+            if (moutonScript != null)
+            {
+                moutonScript.SetTargeted(false);
+                moutonScript.SetFalling(true); // This will trigger manual falling movement
             }
         }
     }
