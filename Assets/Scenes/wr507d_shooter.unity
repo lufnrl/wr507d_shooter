@@ -1586,12 +1586,37 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3185075547031947728, guid: 87ca8816806d34c4e98ca35679b71f0f,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 3185075547031947728, guid: 87ca8816806d34c4e98ca35679b71f0f,
+        type: 3}
+      propertyPath: m_fontSizeBase
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 3924371597921709637, guid: 87ca8816806d34c4e98ca35679b71f0f,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 920
+      objectReference: {fileID: 0}
+    - target: {fileID: 3924371597921709637, guid: 87ca8816806d34c4e98ca35679b71f0f,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 600
+      objectReference: {fileID: 0}
     - target: {fileID: 5306548474080132664, guid: 87ca8816806d34c4e98ca35679b71f0f,
         type: 3}
       propertyPath: m_Name
       value: ReloadArrowsTutorialCanvas
       objectReference: {fileID: 0}
     - target: {fileID: 5306548474080132664, guid: 87ca8816806d34c4e98ca35679b71f0f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7558865004384478487, guid: 87ca8816806d34c4e98ca35679b71f0f,
         type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -2143,30 +2168,30 @@ MonoBehaviour:
   bossRiseHeight: 150
   bossDistanceFromPlayer: 40
   bossAbductionDelay: 2
-  bossAbductionDuration: 10
+  bossAbductionDuration: 20
   sheepRiseSpeed: 2
   cameraShakeIntensity: 0.1
   cameraShakeDuration: 8
   bowObject: {fileID: 1435334693228093941, guid: cc9bb0a65099d5546a9ca709b8129d8d,
     type: 3}
-  lightDimAmount: 0.3
-  maxTotalAliens: 1
+  lightDimAmount: 0.2
+  maxTotalAliens: 20
   initialWaveDelay: 2
-  timeBetweenWaves: 3
+  timeBetweenWaves: 6
   minTimeBetweenWaves: 3
   delayReductionRate: 0.5
   initialEnemiesPerWave: 1
   maxEnemiesPerWave: 8
   enemyIncreaseRate: 0.5
   timeBetweenSpawnsInWave: 1
-  spawnDistance: 50
+  spawnDistance: 30
   spawnHeightMin: 10
   spawnHeightMax: 14
   hoverBobSpeed: 1
   hoverBobAmount: 0.3
-  hoverDurationMin: 3
-  hoverDurationMax: 6
-  attackSpeed: 10
+  hoverDurationMin: 2
+  hoverDurationMax: 5
+  attackSpeed: 13
   hoverAboveDistance: 5
   abductionSpeed: 3
   abductionDuration: 10
@@ -2180,8 +2205,8 @@ MonoBehaviour:
   bossRumbleSound: {fileID: 8300000, guid: 3a3fb3c358bc64cd9a77a65bb09465a1, type: 3}
   bossMusicSound: {fileID: 8300000, guid: 3f94f9442079d47df876d13ce155fa4d, type: 3}
   countdownText: {fileID: 2031780105}
-  beepSound: {fileID: 0}
-  goSound: {fileID: 0}
+  beepSound: {fileID: 8300000, guid: 936d4ef7061030d43bd5993b73a8b670, type: 3}
+  goSound: {fileID: 8300000, guid: e8d476a71d60f5947af821178ed0fd3a, type: 3}
 --- !u!1 &264609132 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1025681519537117646, guid: aa99a810914c5b84b9bc5d51f95dd05c,
@@ -2770,7 +2795,7 @@ PrefabInstance:
     - target: {fileID: 2602515785047301267, guid: cc9bb0a65099d5546a9ca709b8129d8d,
         type: 3}
       propertyPath: arrowMaxSpeed
-      value: 35
+      value: 38
       objectReference: {fileID: 0}
     - target: {fileID: 2602515785047301267, guid: cc9bb0a65099d5546a9ca709b8129d8d,
         type: 3}
@@ -5962,7 +5987,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1073709943
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8923,7 +8948,7 @@ PrefabInstance:
     - target: {fileID: 3221839540518927744, guid: 86d6ad37c1685794dbedff3e484f6ba7,
         type: 3}
       propertyPath: m_MoveSpeed
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3269789360415129670, guid: 86d6ad37c1685794dbedff3e484f6ba7,
         type: 3}
@@ -9084,6 +9109,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_InteractionLayers.m_Bits
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9144637795092834778, guid: 86d6ad37c1685794dbedff3e484f6ba7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -9738,10 +9768,11 @@ AudioSource:
   m_GameObject: {fileID: 1627152326}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 8863599152620558717, guid: d4accc92f63be734e8789f221f49d8b3,
+    type: 2}
   m_audioClip: {fileID: 8300000, guid: 833f5267d05f84c2ba10fa1a9fcee0ba, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.9
+  m_Volume: 1
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -10915,7 +10946,7 @@ MonoBehaviour:
   gameOverText: {fileID: 209049559}
   gameOverBackground: {fileID: 763337317}
   restartButton: {fileID: 1727253977}
-  sheepBonusValue: 100
+  sheepBonusValue: 25
 --- !u!114 &1798494940
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13001,7 +13032,7 @@ PrefabInstance:
     - target: {fileID: 2976246359086311358, guid: aab6a8a8805852f469c32ae245064e38,
         type: 3}
       propertyPath: maxHealth
-      value: 4
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 2976246359086311358, guid: aab6a8a8805852f469c32ae245064e38,
         type: 3}
@@ -13051,18 +13082,23 @@ PrefabInstance:
     - target: {fileID: 2976246359086311358, guid: aab6a8a8805852f469c32ae245064e38,
         type: 3}
       propertyPath: healthyColor.b
-      value: 0.96059203
+      value: 0.5921569
       objectReference: {fileID: 0}
     - target: {fileID: 2976246359086311358, guid: aab6a8a8805852f469c32ae245064e38,
         type: 3}
       propertyPath: healthyColor.r
-      value: 0.5921569
+      value: 0.60160214
       objectReference: {fileID: 0}
     - target: {fileID: 2976246359086311358, guid: aab6a8a8805852f469c32ae245064e38,
         type: 3}
       propertyPath: shieldHitSound
       value: 
       objectReference: {fileID: 8300000, guid: 55d1b805602684744aaf736de37a8387, type: 3}
+    - target: {fileID: 2976246359086311358, guid: aab6a8a8805852f469c32ae245064e38,
+        type: 3}
+      propertyPath: bossPointsValue
+      value: 200
+      objectReference: {fileID: 0}
     - target: {fileID: 2976246359086311358, guid: aab6a8a8805852f469c32ae245064e38,
         type: 3}
       propertyPath: explosionPrefab
@@ -13118,7 +13154,7 @@ PrefabInstance:
     - target: {fileID: 2976246359086311358, guid: aab6a8a8805852f469c32ae245064e38,
         type: 3}
       propertyPath: vulnerableDuration
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2976246359086311358, guid: aab6a8a8805852f469c32ae245064e38,
         type: 3}

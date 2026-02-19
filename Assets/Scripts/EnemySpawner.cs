@@ -305,7 +305,7 @@ public class EnemySpawner : MonoBehaviour
                 // Play sound
                 if (beepSound != null && playerCamera != null)
                 {
-                    AudioSource.PlayClipAtPoint(beepSound, playerCamera.position, 1f);
+                    AudioSource.PlayClipAtPoint(beepSound, playerCamera.position, 0.6f);
                 }
                 
                 // Wait one second
@@ -316,7 +316,7 @@ public class EnemySpawner : MonoBehaviour
             countdownText.text = "GO !";
             if (goSound != null && playerCamera != null)
             {
-                AudioSource.PlayClipAtPoint(goSound, playerCamera.position, 1f);
+                AudioSource.PlayClipAtPoint(goSound, playerCamera.position, 0.6f);
             }
             
             // Leave the "GO !" visible for 1 second
@@ -548,7 +548,7 @@ public class EnemySpawner : MonoBehaviour
         // Play boss music from the beginning
         if (bossMusicSound != null)
         {
-            AudioSource.PlayClipAtPoint(bossMusicSound, playerCamera.position, 0.5f);
+            AudioSource.PlayClipAtPoint(bossMusicSound, playerCamera.position, 0.7f);
         }
         
         // Start camera shake and dim the light
@@ -761,7 +761,7 @@ public class EnemySpawner : MonoBehaviour
         // Play rumble sound when shaking starts
         if (bossRumbleSound != null)
         {
-            AudioSource.PlayClipAtPoint(bossRumbleSound, playerCamera.position, 0.3f);
+            AudioSource.PlayClipAtPoint(bossRumbleSound, playerCamera.position, 0.5f);
         }
         
         // In VR, shake the parent rig instead of the camera (which is controlled by headset)
@@ -1014,7 +1014,7 @@ public class FlyingSaucerHover : MonoBehaviour
         // Play pop sound when UFO arrives
         if (popSound != null && audioSource != null)
         {
-            audioSource.PlayOneShot(popSound);
+            audioSource.PlayOneShot(popSound, 2f);
         }
     }
     
@@ -1362,7 +1362,7 @@ public class FlyingSaucerHover : MonoBehaviour
         // Play sheep scream when abduction starts
         if (sheepScreamSound != null && audioSource != null)
         {
-            audioSource.PlayOneShot(sheepScreamSound);
+            audioSource.PlayOneShot(sheepScreamSound, 1.7f);
         }
         
         isAbducting = true;
@@ -1376,7 +1376,7 @@ public class FlyingSaucerHover : MonoBehaviour
         // Play move sound when attacking sheep
         if (moveSound != null && audioSource != null)
         {
-            audioSource.PlayOneShot(moveSound);
+            audioSource.PlayOneShot(moveSound, 2f);
         }
         
         // Remove any null references (destroyed moutons)
