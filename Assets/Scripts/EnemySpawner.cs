@@ -732,10 +732,90 @@ public class EnemySpawner : MonoBehaviour
             rigTransform.localPosition = Vector3.zero; // Reset to original position
         }
         
-        // Destroy boss if it exists
+        // Make boss escape upward if it exists (game over - boss won!)
+        if (finalBossInstance != null)
+        {
+            StartCoroutine(BossEscapeWithSheep());
+        }
+    }
+    
+    private IEnumerator BossEscapeWithSheep()
+    {
+        if (finalBossInstance == null) yield break;
+        
+        // Boss escape speed (very fast)
+        float escapeSpeed = bossRiseSpeed * 4f; // 4x faster
+        
+        // Disable any boss components that might interfere
+        FlyingSaucerHover bossHover = finalBossInstance.GetComponent<FlyingSaucerHover>();
+        if (bossHover != null)
+        {
+            Destroy(bossHover);
+        }
+        
+        // Disable physics if any
+        Rigidbody bossRb = finalBossInstance.GetComponent<Rigidbody>();
+        if (bossRb != null)
+        {
+            bossRb.isKinematic = true;
+            bossRb.useGravity = false;
+        }
+        
+        // Gather all remaining sheep to rise with the boss
+        MoutonMovement[] allSheep = FindObjectsOfType<MoutonMovement>();
+        List<GameObject> escapingSheep = new List<GameObject>();
+        
+        foreach (MoutonMovement sheep in allSheep)
+        {
+            escapingSheep.Add(sheep.gameObject);
+            
+            // Disable physics on sheep
+            Rigidbody rb = sheep.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.isKinematic = true;
+                rb.useGravity = false;
+            }
+        }
+        
+        // Just rise up quickly and disappear
+        float escapeTime = 2.5f; // Rise for 2.5 seconds then disappear
+        float elapsed = 0f;
+        
+        while (elapsed < escapeTime && finalBossInstance != null)
+        {
+            elapsed += Time.deltaTime;
+            
+            // Move boss upward
+            Vector3 bossPos = finalBossInstance.transform.position;
+            bossPos.y += escapeSpeed * Time.deltaTime;
+            finalBossInstance.transform.position = bossPos;
+            
+            // Move sheep with boss
+            foreach (GameObject sheep in escapingSheep)
+            {
+                if (sheep != null)
+                {
+                    Vector3 sheepPos = sheep.transform.position;
+                    sheepPos.y += escapeSpeed * Time.deltaTime;
+                    sheep.transform.position = sheepPos;
+                }
+            }
+            
+            yield return null;
+        }
+        
+        // Destroy boss and sheep
         if (finalBossInstance != null)
         {
             Destroy(finalBossInstance);
+        }
+        foreach (GameObject sheep in escapingSheep)
+        {
+            if (sheep != null)
+            {
+                Destroy(sheep);
+            }
         }
     }
     

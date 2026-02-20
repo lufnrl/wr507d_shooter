@@ -17,7 +17,7 @@ public class SheepCounter : MonoBehaviour
             }
             else
             {
-                sheepLeftText.color = new Color32(0x53, 0x5E, 0x72, 0xFF);
+                sheepLeftText.color = new Color32(0x28, 0x28, 0x28, 0xFF);
             }
         }
     }
