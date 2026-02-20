@@ -1959,6 +1959,9 @@ MonoBehaviour:
   timeBeforeDestroy: 0.15
   destructionSound: {fileID: 0}
   soundVolume: 1
+  explosionPrefab: {fileID: 1121192042590650, guid: e1b08032bec16ba4eb1ae23cbd572664,
+    type: 3}
+  explosionScale: 1
 --- !u!135 &164740121802102979
 SphereCollider:
   m_ObjectHideFlags: 0
