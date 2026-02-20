@@ -2314,7 +2314,7 @@ MonoBehaviour:
   bowObject: {fileID: 1435334693228093941, guid: cc9bb0a65099d5546a9ca709b8129d8d,
     type: 3}
   lightDimAmount: 0.2
-  maxTotalAliens: 1
+  maxTotalAliens: 20
   initialWaveDelay: 2
   timeBetweenWaves: 6
   minTimeBetweenWaves: 3

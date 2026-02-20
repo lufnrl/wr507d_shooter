@@ -751,7 +751,12 @@ public class EnemySpawner : MonoBehaviour
         // Make boss escape upward if it exists (game over - boss won!)
         if (finalBossInstance != null)
         {
-            StartCoroutine(BossEscapeWithSheep());
+            BossTarget bossTarget = finalBossInstance.GetComponent<BossTarget>();
+
+            if (bossTarget == null || !bossTarget.isDead)
+            {
+                StartCoroutine(BossEscapeWithSheep());
+            }
         }
     }
     
