@@ -297,6 +297,9 @@ public class EnemySpawner : MonoBehaviour
             // Make sure that the text (or its parent Canvas) is lit
             countdownText.gameObject.SetActive(true);
             
+            // Make text smaller (adjust size as needed)
+            countdownText.fontSize = 36; // Reduced from default size
+            
             // Loop for 3, 2, 1
             for (int i = 3; i > 0; i--)
             {
@@ -336,6 +339,19 @@ public class EnemySpawner : MonoBehaviour
 
     void Update()
     {
+        // Keep countdown text fixed in front of player's face while active
+        if (countdownText != null && countdownText.gameObject.activeSelf && playerCamera != null)
+        {
+            Transform head = playerCamera;
+            
+            // Position 2 meters in front of player's face
+            countdownText.transform.position = head.position + (head.forward * 2f);
+            
+            // Make it face the player
+            countdownText.transform.LookAt(head);
+            countdownText.transform.Rotate(0, 180, 0);
+        }
+        
         // Check if all waves are done and all regular aliens are defeated
         if (allWavesCompleted && !bossActivated && finalBossInstance != null)
         {

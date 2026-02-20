@@ -22,6 +22,9 @@ public class ArrowController : MonoBehaviour
 
     public GameObject tutorialCanvas;
     private bool hasShownTutorial = false; // To show it only once
+    
+    private GameObject quiverFeedbackCanvas; // Reference to quiver equipped message
+    private bool hasHiddenQuiverFeedback = false; // Track if we've hidden it
 
     // To know how many shooted arrows in global (for stats at the end of a game for example)
     // private int totalArrowsFired = 0;
@@ -43,6 +46,13 @@ public class ArrowController : MonoBehaviour
         // If we have arrows left in the quiver
         if (currentArrowCount > 0)
         {
+            // Hide quiver equipped message on first arrow shot
+            if (!hasHiddenQuiverFeedback && quiverFeedbackCanvas != null)
+            {
+                quiverFeedbackCanvas.SetActive(false);
+                hasHiddenQuiverFeedback = true;
+            }
+            
             bowReleaseAudioSource.Play();
             midPointVisual.SetActive(false);
             // Debug.Log($"Bow strength is {strength}");
@@ -115,11 +125,23 @@ public class ArrowController : MonoBehaviour
     {
         tutorialCanvas.SetActive(true); // Display tutorial canvas
         hasShownTutorial = true; // Check it only once
+    }
+    
+    public void SetQuiverFeedbackCanvas(GameObject canvas)
+    {
+        quiverFeedbackCanvas = canvas;
+    }
 
-        Transform head = Camera.main.transform; // Assuming the main camera is the player's head
+    void Update()
+    {
+        // Keep tutorial canvas fixed in front of player's head while active
+        if (tutorialCanvas != null && tutorialCanvas.activeSelf)
+        {
+            Transform head = Camera.main.transform; // Assuming the main camera is the player's head
 
-        tutorialCanvas.transform.position = head.position + (head.forward * 2f); // Position = head +s meter forward
-        tutorialCanvas.transform.LookAt(head); // Canvas look at the player
-        tutorialCanvas.transform.Rotate(0, 180, 0); // Rotate around y axis to face the player correctly
+            tutorialCanvas.transform.position = head.position + (head.forward * 2f); // Position = head + 2 meters forward
+            tutorialCanvas.transform.LookAt(head); // Canvas look at the player
+            tutorialCanvas.transform.Rotate(0, 180, 0); // Rotate around y axis to face the player correctly
+        }
     }
 }

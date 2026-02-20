@@ -40,6 +40,22 @@ public class EquipQuiver : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+        // Keep feedback canvas fixed in front of player's head while active
+        if (feedbackCanvas != null && feedbackCanvas.activeSelf)
+        {
+            Transform head = Camera.main.transform;
+            
+            // Position 2 meters in front of player's face
+            feedbackCanvas.transform.position = head.position + (head.forward * 2f);
+            
+            // Make it face the player
+            feedbackCanvas.transform.LookAt(head);
+            feedbackCanvas.transform.Rotate(0, 180, 0);
+        }
+    }
+
     private void OnQuiverEquipped(SelectEnterEventArgs args)
     {
         // Disable outline
@@ -70,12 +86,10 @@ public class EquipQuiver : MonoBehaviour
             audioSource.PlayOneShot(equipSound);
         }
 
-        // Display feedback message on canvas
+        // Display feedback message on canvas AFTER the countdown finishes (5 seconds delay)
         if (feedbackCanvas != null)
         {
-            feedbackCanvas.SetActive(true);
-            
-            StartCoroutine(HideMessageAfterDelay(4f));
+            StartCoroutine(ShowMessageAfterCountdown(5f));
         }
 
         // Reload arrows
@@ -94,13 +108,21 @@ public class EquipQuiver : MonoBehaviour
         simpleInteractable.enabled = false;
     }
 
-    private IEnumerator HideMessageAfterDelay(float delay)
+    private IEnumerator ShowMessageAfterCountdown(float delayBeforeShow)
     {
-        yield return new WaitForSeconds(delay);
-        // Turn off the Canvas after the delay
+        // Wait for countdown to finish
+        yield return new WaitForSeconds(delayBeforeShow);
+        
+        // Now show the feedback - stays visible until first arrow is shot
         if (feedbackCanvas != null)
         {
-            feedbackCanvas.SetActive(false);
+            feedbackCanvas.SetActive(true);
+            
+            // Tell the bow to hide this message when first arrow is shot
+            if (bowArrowController != null)
+            {
+                bowArrowController.SetQuiverFeedbackCanvas(feedbackCanvas);
+            }
         }
     }
 
