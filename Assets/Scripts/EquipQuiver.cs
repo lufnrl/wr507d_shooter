@@ -20,7 +20,6 @@ public class EquipQuiver : MonoBehaviour
     [SerializeField] private GameObject feedbackCanvas; 
     
     [Tooltip("Le texte UI à modifier")]
-    [SerializeField] private TextMeshProUGUI feedbackMessage;
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip equipSound;
 
@@ -72,9 +71,8 @@ public class EquipQuiver : MonoBehaviour
         }
 
         // Display feedback message on canvas
-        if (feedbackCanvas != null && feedbackMessage != null)
+        if (feedbackCanvas != null)
         {
-            feedbackMessage.text = "Carquois bien équipé dans votre dos ! Tirez la corde pour envoyer une flèche !";
             feedbackCanvas.SetActive(true);
             
             StartCoroutine(HideMessageAfterDelay(4f));

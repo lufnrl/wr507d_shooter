@@ -87,9 +87,9 @@ public class EndScreenManager : MonoBehaviour
         
         // Inject in text with formatage
         ShowEndScreen(
-            $"<size=60>You Win !</size>\n" +
+            $"<size=60>Gagné !</size>\n" +
             $"<size=30>Score : {baseScore}\n" +
-            $"+{sheepCount} sheep saved</size>\n" +
+            $"+{sheepCount} moutons sauvés</size>\n" +
             $"<size=60>Total = {finalTotalScore}</size>", 
             new Color32(0x62, 0x2E, 0x03, 0xFF)
         );
