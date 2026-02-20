@@ -553,7 +553,7 @@ public class EnemySpawner : MonoBehaviour
         Collider col = finalBossInstance.GetComponent<Collider>();
         if (col != null) col.enabled = true;
 
-        // RReactivate the visual
+        // Reactivate the visual
         Renderer[] renderers = finalBossInstance.GetComponentsInChildren<Renderer>();
         foreach (Renderer r in renderers)
         {
@@ -583,11 +583,17 @@ public class EnemySpawner : MonoBehaviour
             yield return null;
         }
         
+        BossTarget bossTarget = finalBossInstance.GetComponent<BossTarget>();
+        if (bossTarget != null)
+        {
+            bossTarget.TurnOnShield(); 
+        }
+
         // Debug.Log("Final boss reached peak - waiting before attack...");
         
         // Wait at the top for a few seconds (menacing pause)
         yield return new WaitForSeconds(3f);
-        
+
         // Debug.Log("Final boss moving in front of player!");
         
         // Phase 2: Move to a position in front of the player, keeping current height
@@ -619,12 +625,6 @@ public class EnemySpawner : MonoBehaviour
             
             yield return null;
         }
-        
-        // Particle beam disabled for final boss
-        // if (bossBeam != null)
-        // {
-        //     bossBeam.Play();
-        // }
         
         // Mark boss as fully active
         bossFullyActive = true;
