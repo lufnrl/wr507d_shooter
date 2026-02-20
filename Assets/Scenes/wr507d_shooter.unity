@@ -8945,6 +8945,16 @@ PrefabInstance:
       propertyPath: m_InteractionLayers.m_Bits
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 3046150440665173504, guid: 86d6ad37c1685794dbedff3e484f6ba7,
+        type: 3}
+      propertyPath: m_Antialiasing
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3046150440665173504, guid: 86d6ad37c1685794dbedff3e484f6ba7,
+        type: 3}
+      propertyPath: m_RendererIndex
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 3221839540518927744, guid: 86d6ad37c1685794dbedff3e484f6ba7,
         type: 3}
       propertyPath: m_MoveSpeed
