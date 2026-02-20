@@ -29,6 +29,7 @@ public class MoutonMovement : MonoBehaviour
     public bool isGameFinished { get; private set; } = false;
     
     private bool isFalling = false;
+    public bool IsFalling => isFalling;
     private float fallSpeed = 8f; // Speed at which sheep fall
 
     void Start()

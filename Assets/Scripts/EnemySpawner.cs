@@ -1390,7 +1390,7 @@ public class FlyingSaucerHover : MonoBehaviour
             foreach (GameObject mouton in moutonList)
             {
                 MoutonMovement moutonScript = mouton.GetComponent<MoutonMovement>();
-                if (moutonScript != null && !moutonScript.isTargeted)
+                if (moutonScript != null && !moutonScript.isTargeted && !moutonScript.IsFalling)
                 {
                     availableMoutons.Add(mouton);
                 }
@@ -1427,9 +1427,33 @@ public class FlyingSaucerHover : MonoBehaviour
     {
         isAttacking = false;
         yield return new WaitForSeconds(1f);
+        
+        // Only retry if not already doing something and there are actually available sheep
         if (!isAbducting && !hasPickedUp)
         {
-            StartAttacking();
+            // Check if there are any available sheep before retrying
+            moutonList.RemoveAll(item => item == null);
+            
+            bool hasAvailableSheep = false;
+            foreach (GameObject mouton in moutonList)
+            {
+                if (mouton != null)
+                {
+                    MoutonMovement moutonScript = mouton.GetComponent<MoutonMovement>();
+                    if (moutonScript != null && !moutonScript.isTargeted && !moutonScript.IsFalling)
+                    {
+                        hasAvailableSheep = true;
+                        break;
+                    }
+                }
+            }
+            
+            // Only retry if there are available sheep
+            if (hasAvailableSheep)
+            {
+                StartAttacking();
+            }
+            // Otherwise just stay in idle hover state
         }
     }
 }

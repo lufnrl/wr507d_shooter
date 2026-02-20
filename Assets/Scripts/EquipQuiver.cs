@@ -74,7 +74,7 @@ public class EquipQuiver : MonoBehaviour
         // Display feedback message on canvas
         if (feedbackCanvas != null && feedbackMessage != null)
         {
-            feedbackMessage.text = "Carquois bien équipé dans votre dos !";
+            feedbackMessage.text = "Carquois bien équipé dans votre dos ! Tirez la corde pour envoyer une flèche !";
             feedbackCanvas.SetActive(true);
             
             StartCoroutine(HideMessageAfterDelay(4f));
