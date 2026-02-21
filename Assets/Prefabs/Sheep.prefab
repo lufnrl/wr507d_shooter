@@ -2606,7 +2606,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 1
   rotationSpeed: 1
-  changeDirectionInterval: 3
+  changeDirectionInterval: 5
   wanderRadius: 10
 --- !u!54 &-7136005793842203071
 Rigidbody:

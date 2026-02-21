@@ -361,6 +361,7 @@ GameObject:
   - component: {fileID: 5663893676086941514}
   - component: {fileID: 1670256628}
   - component: {fileID: 6678509202150728127}
+  - component: {fileID: 375015213788433223}
   m_Layer: 0
   m_Name: Right Controller
   m_TagString: Untagged
@@ -698,6 +699,33 @@ MonoBehaviour:
   - groupMember: {fileID: 2141651114331267770}
     overrideGroupMembers:
     - {fileID: 6045481230268494804}
+--- !u!114 &375015213788433223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1670256624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fa903cb4d7a4a14d9a08980d0f45c07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bow: {fileID: 1018952810061044275, guid: f1f5f898fbfdb80478825ce9b01fe8ae, type: 3}
+  pullingHand: {fileID: 1670256625}
+  pullAction:
+    m_UseReference: 1
+    m_Action:
+      m_Name: Pull
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: f3a68a01-2f63-42ec-8ac5-ec592cbccadc
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: 7904272356298805229, guid: c348712bda248c246b8c49b3db54643f,
+      type: 3}
 --- !u!1 &1680501586
 GameObject:
   m_ObjectHideFlags: 0

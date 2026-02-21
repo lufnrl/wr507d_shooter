@@ -26,6 +26,12 @@ public class MoutonMovement : MonoBehaviour
     // Track if this mouton is being targeted by an alien
     public bool isTargeted { get; private set; }
 
+    public bool isGameFinished { get; private set; } = false;
+    
+    private bool isFalling = false;
+    public bool IsFalling => isFalling;
+    private float fallSpeed = 8f; // Speed at which sheep fall
+
     void Start()
     {
         startPosition = transform.position;
@@ -46,6 +52,8 @@ public class MoutonMovement : MonoBehaviour
 
     void Update()
     {
+        if (isGameFinished) return;
+
         // Don't move if being targeted/captured
         if (isTargeted)
         {
@@ -59,6 +67,48 @@ public class MoutonMovement : MonoBehaviour
             }
             return;
         }
+        
+        // Manually move sheep down when falling
+        if (isFalling)
+        {
+            // Stop walking animation while falling
+            if (animator != null && isWalking)
+            {
+                animator.speed = 0;
+                isWalking = false;
+            }
+            
+            // Move downward manually
+            transform.position += Vector3.down * fallSpeed * Time.deltaTime;
+            
+            // Check if reached the ground with a raycast
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, Vector3.down, out hit, 1f))
+            {
+                // Stop falling when we detect ground
+                transform.position = new Vector3(transform.position.x, hit.point.y, transform.position.z);
+                
+                // Restore normal constraints
+                if (rb != null)
+                {
+                    rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionY;
+                    rb.velocity = Vector3.zero;
+                    rb.angularVelocity = Vector3.zero;
+                    rb.drag = 5f;
+                }
+                
+                isFalling = false;
+                startPosition = transform.position;
+                ChooseNewDirection();
+                
+                if (animator != null)
+                {
+                    animator.speed = 1;
+                }
+            }
+            
+            return;
+        }
 
         // Resume animator speed if it was paused
         if (animator != null && animator.speed == 0)
@@ -67,12 +117,12 @@ public class MoutonMovement : MonoBehaviour
         }
 
         // Move in the current direction using Rigidbody for proper physics
-        if (rb != null)
+        if (rb != null && !isFalling)
         {
             Vector3 newPosition = rb.position + targetDirection * moveSpeed * Time.deltaTime;
             rb.MovePosition(newPosition);
         }
-        else
+        else if (!isFalling)
         {
             // Fallback if no Rigidbody
             transform.position += targetDirection * moveSpeed * Time.deltaTime;
@@ -122,5 +172,79 @@ public class MoutonMovement : MonoBehaviour
     public void SetTargeted(bool targeted)
     {
         isTargeted = targeted;
+    }
+    
+    public void SetFalling(bool falling)
+    {
+        isFalling = falling;
+        if (falling && animator != null)
+        {
+            animator.speed = 0;
+            isWalking = false;
+        }
+    }
+    
+    void OnCollisionEnter(Collision collision)
+    {
+        // If falling and hit the ground, restore normal movement constraints
+        if (isFalling && rb != null)
+        {
+            // Check if we hit something below us (ground)
+            foreach (ContactPoint contact in collision.contacts)
+            {
+                // If the contact normal points upward (we hit something from above)
+                if (contact.normal.y > 0.5f)
+                {
+                    // Restore normal constraints - freeze Y position so sheep walks on ground level
+                    rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionY;
+                    rb.velocity = Vector3.zero;
+                    rb.angularVelocity = Vector3.zero;
+                    rb.drag = 5f; // Restore normal drag
+                    isFalling = false;
+                    
+                    // Update start position to current location after falling
+                    startPosition = transform.position;
+                    
+                    // Choose a new direction to walk
+                    ChooseNewDirection();
+                    
+                    // Resume walking animation
+                    if (animator != null)
+                    {
+                        animator.speed = 1;
+                    }
+                    
+                    break;
+                }
+            }
+        }
+    }
+
+    public void FinishGame()
+    {
+        isGameFinished = true;
+        
+        if (animator != null)
+        {
+            animator.speed = 0;
+            isWalking = false;
+        }
+
+        UnityEngine.AI.NavMeshAgent agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+        if (agent != null)
+        {
+            agent.enabled = false; 
+        }
+        
+        if (rb != null)
+        {
+            if (rb.isKinematic == false)
+            {
+                rb.velocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+                rb.useGravity = false;
+                rb.isKinematic = true;
+            }
+        }
     }
 }

@@ -21,6 +21,9 @@ namespace Ursaanimation.CubicFarmAnimals
 
         void Update()
         {
+            // Disabled - not compatible with new Input System
+            // This script is for animation testing only
+            /*
             if (Input.GetKeyDown(KeyCode.W))
             {
                 animator.Play(walkForwardAnimation);
@@ -53,6 +56,7 @@ namespace Ursaanimation.CubicFarmAnimals
             {
                 animator.Play(standtositAnimation);
             }
+            */
         }
     }
 }
